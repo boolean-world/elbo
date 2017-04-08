@@ -14,6 +14,9 @@ class UpdatePoliciesCommand extends Command {
 			'http://mirror2.malwaredomains.com/files/justdomains',
 			'https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt',
 			'http://www.networksec.org/grabbho/block.txt'
+		],
+		DomainPolicy::POLICY_BLOCKED_REDIRECTOR => [
+			'https://raw.githubusercontent.com/boolean-world/elbo/master/misc/blacklists/redirectors.txt'
 		]
 	];
 
