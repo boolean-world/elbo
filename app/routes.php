@@ -4,9 +4,9 @@ return function(FastRoute\RouteCollector $r) {
 	$r->get('/', 'IndexController');
 	$r->post('/~shorten', 'ShortenController');
 	$r->get('/~rl', 'RateLimitController');
-	$r->get('/{shorturl:[A-Za-z0-9_-]{1,70}}', 'RedirectController');
-	$r->get('/~qr/{shorturl:[A-Za-z0-9_-]{1,70}}', 'QRCodeController');
-	$r->get('/~qr/img/{shorturl:[A-Za-z0-9_-]{1,70}}', 'QRImageController');
+	$r->get('/{shorturl:[A-Za-z0-9-]{1,70}}', 'RedirectController');
+	$r->get('/~qr/{shorturl:[A-Za-z0-9-]{1,70}}', 'QRCodeController');
+	$r->get('/~qr/img/{shorturl:[A-Za-z0-9-]{1,70}}', 'QRImageController');
 
 	// Controllers for the registered users.
 	$r->get('/~login', 'LoginPageController');
@@ -22,16 +22,16 @@ return function(FastRoute\RouteCollector $r) {
 	$r->post('/~password/reset', 'PasswordResetHandlerController');
 	$r->post('/~password/reset/{token}', 'PasswordResetChangeController');
 	$r->get('/~password/reset/{token}', 'PasswordResetTokenController');
-	$r->get('/~analytics/{shorturl:[A-Za-z0-9_-]{1,70}}', 'AnalyticsController');
-	$r->get('/~analytics/data/{shorturl:[A-Za-z0-9_-]{1,70}}/{duration:week|month|year}', 'AnalyticsDataController');
+	$r->get('/~analytics/{shorturl:[A-Za-z0-9-]{1,70}}', 'AnalyticsController');
+	$r->get('/~analytics/data/{shorturl:[A-Za-z0-9-]{1,70}}/{duration:week|month|year}', 'AnalyticsDataController');
 
 	// Admin panel.
 	$r->get('/~admin', 'Admin\InitController');
 
 	$r->get('/~admin/shorturls', 'Admin\ShortURLController');
-	$r->get('/~admin/shorturl/delete/{shorturl:[A-Za-z0-9_-]{1,70}}', 'Admin\ShortURLDeleteController');
-	$r->get('/~admin/shorturl/enable/{shorturl:[A-Za-z0-9_-]{1,70}}', 'Admin\ShortURLEnableController');
-	$r->get('/~admin/shorturl/disable/{shorturl:[A-Za-z0-9_-]{1,70}}', 'Admin\ShortURLDisableController');
+	$r->get('/~admin/shorturl/delete/{shorturl:[A-Za-z0-9-]{1,70}}', 'Admin\ShortURLDeleteController');
+	$r->get('/~admin/shorturl/enable/{shorturl:[A-Za-z0-9-]{1,70}}', 'Admin\ShortURLEnableController');
+	$r->get('/~admin/shorturl/disable/{shorturl:[A-Za-z0-9-]{1,70}}', 'Admin\ShortURLDisableController');
 
 	$r->get('/~admin/policies', 'Admin\PoliciesController');
 	$r->get('/~admin/policy/new', 'Admin\NewPolicyController');
