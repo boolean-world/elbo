@@ -1,0 +1,66 @@
+.adm-table {
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+
+.adm-table .actions-col {
+  text-align: right;
+}
+
+.shorturl-table .url-col {
+  width: 50%;
+}
+
+.shorturl-table .shorturl-col,
+.shorturl-table .custom-col {
+  width: 10%;
+}
+
+.shorturl-table .created-col {
+  width: 20%;
+}
+
+.policies-table .domain-col {
+  width: 20%;
+}
+
+.policies-table .policy-col {
+  width: 15%;
+}
+
+.policies-table .comment-col {
+  width: 45%;
+}
+
+.policies-table .automated-col {
+  width: 10%;
+}
+
+.users-table .email-col {
+  width: 30%;
+}
+
+.users-table .created-col {
+  width: 15%;
+}
+
+.users-table .last-login-col {
+  width: 15%;
+}
+
+.users-table .disabled-col {
+  width: 15%;
+}
+
+.editor {
+  height: 400px;
+  resize: none;
+  color: #EFFFFF;
+  background-color: #263238;
+  border: 0;
+  padding: 12px;
+  border-radius: 4px;
+  width: 100%;
+  font-size: 13px;
+  font-family: monospace;
+}

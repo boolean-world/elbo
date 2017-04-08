@@ -1,0 +1,21 @@
+{% extends('layouts/admin.html.twig') %}
+
+{% block head %}
+<title>Link enabled - Admin Panel</title>
+<meta http-equiv="refresh" content="3; url={{ url('/~admin/shorturls', {
+  shorturl: r_shorturl,
+  title: r_title,
+  url: r_url,
+  custom: r_custom,
+  disabled: r_disabled,
+  ip: r_ip,
+  n: r_n
+}) }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h3>The link was enabled.</h3>
+  <p>Redirecting to the previous page in a few seconds...</p>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends('layouts/app.html.twig') %}
+
+{% block head %}
+<title>elbo.in &mdash; shorten, customize and get statistics for your links.</title>
+<meta name="description" content="elbo.in is a URL shortener which makes your long links short. With previews, QR codes and free statistics.">
+<meta name="keywords" content="qurl, url shortener, link shortener, short url, track visits, url to qr code, booleanworld">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid" id="shorten-container">
+  <div class="container">
+    <h2 id="main-promo-text" class="centered-text uppercase">Shorten your long links</h2>
+    <br>
+    {% include('shortenform.html.twig') %}
+  </div>
+
+  <div id="promo-image" class="centered-text">
+    <img src="/assets/img/graph.png">
+  </div>
+
+  <div class="container hidden" id="shortened-urls-container">
+    <h3 class="uppercase">Your shortened links</h3>
+    <div id="shortened-urls-list"></div>
+  </div>
+</div>
+
+<div class="container centered-text">
+  <h3 class="uppercase">Take control of your links</h3>
+  <p class="promo-text">elbo.in is an URL shortener. It takes your long links and gives you a short one that you can share anywhere.</p>
+
+  <div class="row centered-text">
+    <div class="col-sm-4">
+      <h4>Shorten</h4>
+      <i class="fa fa-link fa-4x" aria-hidden="true"></i><br>
+      Shorten and customize your long links and share them through various channels
+    </div>
+    <div class="col-sm-4">
+      <h4>Measure</h4>
+      <i class="fa fa-bar-chart fa-4x" aria-hidden="true"></i><br>
+      Measure the impact of your shared links by analyzing statistics for your links
+    </div>
+    <div class="col-sm-4">
+      <h4>Target</h4>
+      <i class="fa fa-dot-circle-o fa-4x" aria-hidden="true"></i><br>
+      Understand your audience and better target your marketing campaigns
+    </div>
+  </div>
+
+  <div class="row centered-text" id="call-to-action">
+    <a class="btn btn-success" href="/~signup">Sign up now</a>
+  </div>
+
+</div>
+
+<div class="container-fluid" id="ext-promo-container">
+  <div class="container centered-text">
+    <div class="padded-container">
+      <h3 class="uppercase">Use elbo.in right from your browser</h3>
+      Add the elbo.in extension to your browser to shorten and share URLs directly from your browser
+    </div>
+    <div class="extensions-container">
+      <div class="col-sm-4">
+        <a href="https://chrome.google.com/webstore/detail/qurlpw-shorten-your-links/ecllbibphdcbbpjdilliapdjmdneoacp">
+          <img class="browser-icon" src="/assets/img/chrome_64x64.png"><br>
+          Download for Chrome
+        </a>
+      </div>
+      <div class="col-sm-4">
+        <a href="https://addons.opera.com/en/extensions/details/qurlpw-shorten-your-links">
+          <img class="browser-icon" src="/assets/img/opera_64x64.png"><br>
+          Download for Opera
+        </a>
+      </div>
+      <div class="col-sm-4">
+        <a href="https://addons.mozilla.org/en-GB/firefox/addon/qurl-pw-shorten-your-links">
+          <img class="browser-icon" src="/assets/img/firefox_64x64.png"><br>
+          Download for Firefox
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container centered-text">
+  <div class="col-sm-4 col-sm-offset-4">
+    <h3><i class="fa fa-github"></i> Open Source</h3>
+    <p>elbo.in is 100% open source. All source code is available on
+      <a href="https://github.com/boolean-world/elbo">Github</a>.
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=recaptchaCallback&amp;render=explicit" async defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.15/clipboard.min.js"></script>
+<script src="/assets/js/home.js"></script>
+{% endblock %}

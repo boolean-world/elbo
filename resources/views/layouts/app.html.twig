@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/paper/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans%7CSource+Sans+Pro:300">
+  <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+  <link rel="icon" type="image/png" href="/assets/img/favicon.png">
+  {% block head %}
+  {% endblock %}
+  {% block css %}
+  {% endblock %}
+</head>
+<body>
+  <div class="main">
+    {% include('layouts/navbar.html.twig') %}
+
+    <noscript>
+      <div class="alert alert-warning noscript-alert">
+        This website requires Javascript to function properly, but Javascript is disabled in your browser.
+        Please enable Javascript.
+      </div>
+    </noscript>
+
+    {% block content %}
+    {% endblock %}
+  </div>
+  <div class="push-to-bottom"></div>
+
+  <div class="footer">
+    <hr>
+    <div class="container centered-text">
+      <a href="https://www.booleanworld.com/legal/#tos">Terms of Service</a> |
+      <a href="https://www.booleanworld.com/legal/#privacy">Privacy Policy</a> |
+      <a href="https://www.booleanworld.com/contact-us/">Contact Us</a> |
+      Copyright &copy; 2017 booleanworld.com. All rights reserved.
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  {% block js %}
+  {% endblock %}
+</body>
+</html>

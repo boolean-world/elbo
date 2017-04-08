@@ -1,0 +1,81 @@
+{% extends('layouts/app.html.twig') %}
+
+{% block head %}
+<title>Log in &ndash; elbo.in</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <div class="panel panel-default">
+        <div class="panel-heading">Login</div>
+        <div class="panel-body">
+          <form class="form-horizontal" method="POST" action="/~login">
+            <div class="form-group {% if errors.login %}has-error{% endif %}">
+              <label for="email" class="col-md-4 control-label">E-Mail Address</label>
+
+              <div class="col-md-6">
+                <input id="email" type="email" class="form-control" name="email" value="{{ email }}" required autofocus>
+              </div>
+            </div>
+
+            <div class="form-group {% if errors.login %}has-error{% endif %}">
+              <label for="password" class="col-md-4 control-label">Password</label>
+
+              <div class="col-md-6">
+                <input id="password" type="password" class="form-control" name="password" required>
+
+                 {% if errors.login %}
+                   <span class="help-block">
+                     <strong>Invalid username or password.</strong>
+                   </span>
+                 {% endif %}
+              </div>
+            </div>
+
+            {% if show_captcha %}
+            <div class="form-group {% if errors.captcha %}has-error{% endif %}">
+              <div class="col-md-4"></div>
+              <div class="col-md-6">
+                <div class="g-recaptcha" data-sitekey="{{ config('api_key.recaptcha_site_key') }}"></div>
+
+                {% if errors.captcha %}
+                <span class="help-block">
+                  <strong>You did not fill in the captcha correctly.</strong>
+                </span>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+              <div class="col-md-8 col-md-offset-4">
+                <input type="submit" value="Login" class="btn btn-primary">
+
+                <a class="btn btn-link" href="/~password/reset">
+                  Forgot Your Password?
+                </a>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4"></div>
+              <div class="col-md-6">
+                Don't have an account? <a href="/~signup">Sign up now</a>.
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+  {% if show_captcha %}
+  <script src="https://www.google.com/recaptcha/api.js"></script>
+  {% endif %}
+{% endblock %}

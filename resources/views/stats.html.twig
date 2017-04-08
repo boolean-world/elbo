@@ -1,0 +1,43 @@
+{% extends('layouts/app.html.twig') %}
+
+{% block title %}
+<title>Statistics for elbo.in/{{ shorturl }} &mdash; elbo.in</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>Statistics for elbo.in/{{ shorturl }}</h2>
+  <hr>
+
+  <div class="row">
+    <div class="col-sm-10">
+      Created on: {{ urlinfo.created_at | date("l, d F Y") }}<br>
+      Redirects to <a href="{{ urlinfo.url }}">http://google.com/</a>
+    </div>
+    <div class="col-sm-2 analytics-details">
+      Total clicks: 
+      <span class="click-count">{{ count }}</span>
+    </div>
+   </div>
+
+  <ul class="nav nav-pills nav-justified">
+    <li class="active"><a data-toggle="pill" id="week-pill" href="#week-stats">This week</a></li>
+    <li><a data-toggle="pill" id="month-pill" href="#month-stats">This month</a></li>
+    <li><a data-toggle="pill" id="year-pill" href="#year-stats">This year</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="week-stats" class="tab-pane fade in active" data-loaded="1">
+    </div>
+    <div id="month-stats" class="tab-pane fade" data-loaded="0">
+    </div>
+    <div id="year-stats" class="tab-pane fade" data-loaded="0">
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="/assets/js/stats.js"></script>
+{% endblock %}

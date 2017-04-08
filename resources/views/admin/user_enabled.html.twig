@@ -1,0 +1,19 @@
+{% extends('layouts/admin.html.twig') %}
+
+{% block head %}
+<title>User enabled &mdash; Admin Panel</title>
+<meta http-equiv="refresh" content="3; url={{ url('/~admin/users', {
+  email: r_email,
+  disabled: r_disabled,
+  created_ip: r_created_ip,
+  last_login_ip: r_last_login_ip,
+  n: r_n
+}) }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h3>The user account was enabled.</h3>
+  <p>Redirecting to the previous page in a few seconds...</p>
+</div>
+{% endblock %}

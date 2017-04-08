@@ -1,0 +1,151 @@
+{% extends('layouts/admin.html.twig') %}
+
+{% block head %}
+<title>Short URLs &mdash; Admin Panel</title>
+<meta name="referrer" content="same-origin">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form>
+        <div class="row">
+          <div class="col-sm-2">
+            ShortURL<input name="shorturl" type="text" class="form-control" value="{{ form.shorturl }}">
+          </div>
+          <div class="col-sm-2">
+            Title<input name="title" type="text" class="form-control" value="{{ form.title }}">
+          </div>
+          <div class="col-sm-2">
+            URL<input name="url" type="text" class="form-control" value="{{ form.url }}">
+          </div>
+          <div class="col-sm-2">
+            Custom
+            <select name="custom" class="form-control">
+              <option value="0" {% if form.custom == 0 %} selected {% endif %}>-</option>
+              <option value="1" {% if form.custom == 1 %} selected {% endif %}>Yes</option>
+              <option value="2" {% if form.custom == 2 %} selected {% endif %}>No</option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            Disabled
+            <select name="disabled" class="form-control">
+              <option value="0" {% if form.disabled == 0 %} selected {% endif %}>-</option>
+              <option value="1" {% if form.disabled == 1 %} selected {% endif %}>Yes</option>
+              <option value="2" {% if form.disabled == 2 %} selected {% endif %}>No</option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            IP<input name="ip" type="text" class="form-control" value="{{ form.ip }}">
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-sm-7">
+            Use % and _ as wildcards.
+          </div>
+          <div class="col-sm-5">
+            <input class="btn btn-primary pull-right" type="submit" value="Search">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <table class="table adm-table shorturl-table table-hover">
+    <thead>
+      <tr>
+        <th class="shorturl-col">ShortURL</th>
+        <th class="url-col">URL</th>
+        <th class="custom-col">Custom</th>
+        <th class="created-col">Created</th>
+        <th class="actions-col"></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for entry in entries %}
+      <tr {% if entry.disabled %} class="bg-danger" {% endif %}>
+        <td>{{ entry.shorturl }}</td>
+        <td class="url-col">
+          {% if entry.title is not null %}
+            {{ entry.title }}<br>
+          {% endif %}
+          <a href="{{ entry.url }}">{{ entry.url }}</a>
+        </td>
+        <td class="custom-col">{% if entry.custom %} Yes {% else %} No {% endif %}</td>
+        <td class="created-col">
+          {{ entry.created_at | date("Y-m-d h:m:s") }}<br>
+          {{ entry.ip }}
+          {{ entry.email }}
+        </td>
+        <td class="actions-col">
+          <a href="/{{ entry.shorturl }}+" target="_blank">
+            <i title="View statistics" class="fa fa-1_5x fa-area-chart text-info"></i>
+          </a>
+          {% if entry.disabled %}
+          <a href="{{ url('/~admin/shorturl/enable/' ~ entry.shorturl, {
+            r_shorturl: form.shorturl,
+            r_title: form.title,
+            r_url: form.url,
+            r_custom: form.custom,
+            r_disabled: form.disabled,
+            r_ip: form.ip,
+            r_n: pagenum
+          }) }}" title="Enable link"><i class="fa fa-1_5x fa-check text-info"></i></a>
+          {% else %}
+          <a href="{{ url('/~admin/shorturl/disable/' ~ entry.shorturl, {
+            r_shorturl: form.shorturl,
+            r_title: form.title,
+            r_url: form.url,
+            r_custom: form.custom,
+            r_disabled: form.disabled,
+            r_ip: form.ip,
+            r_n: pagenum
+          }) }}"><i title="Disable link" class="fa fa-1_5x fa-ban text-danger"></i></a>
+          {% endif %}
+          <a href="{{ url('/~admin/shorturl/delete/' ~ entry.shorturl, {
+            r_shorturl: form.shorturl,
+            r_title: form.title,
+            r_url: form.url,
+            r_custom: form.custom,
+            r_disabled: form.disabled,
+            r_ip: form.ip,
+            r_n: pagenum
+          }) }}"><i title="Delete link" class="fa fa-1_5x fa-trash text-danger"></i></a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="row">
+    <div class="col-xs-6">
+      {% if pagenum > 0 %}
+        <a href="{{ url('/~admin/shorturls', {
+          shorturl: form.shorturl,
+          title: form.title,
+          url: form.url,
+          custom: form.custom,
+          disabled: form.disabled,
+          ip: form.ip,
+          n: pagenum - 1
+        }) }}" class="btn btn-default"><i class="fa fa-chevron-left"></i> Previous</a>
+      {% endif %}
+    </div>
+    <div class="col-xs-6">
+      {% if has_more %}
+        <a href="{{ url('/~admin/shorturls', {
+          shorturl: form.shorturl,
+          title: form.title,
+          url: form.url,
+          custom: form.custom,
+          disabled: form.disabled,
+          ip: form.ip,
+          n: pagenum + 1
+        }) }}" class="btn btn-default pull-right">Next <i class="fa fa-chevron-right"></i></a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

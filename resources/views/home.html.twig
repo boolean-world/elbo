@@ -1,0 +1,23 @@
+{% extends('layouts/app.html.twig') %}
+
+{% block head %}
+<title>Home &mdash; elbo.in</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  {% include('shortenform.html.twig') %}
+</div>
+
+<div class="container" id="shortened-urls-container">
+  <h3>Your shortened links</h3>
+  <div id="shortened-urls-list" data-history-time="{{ time }}" data-history-num="0">
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=recaptchaCallback&amp;render=explicit" async defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.15/clipboard.min.js"></script>
+<script src="/assets/js/home.js"></script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends('layouts/admin.html.twig') %}
+
+{% block head %}
+<title>Admin Panel &mdash; elbo.in</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row centered-text">
+    <div class="col-sm-4">
+      <h3>
+        <a href="/~admin/users" class="fa-stack fa-lg">
+          <i class="fa fa-circle fa-stack-2x text-info"></i>
+          <i class="fa fa-users fa-stack-1x fa-inverse"></i>
+        </a>
+      </h3>
+      <h4><a href="/~admin/users">Users</a></h4>
+      <hr>
+      {{ user_count }} users
+    </div>
+    <div class="col-sm-4">
+      <h3>
+        <a href="/~admin/policies" class="fa-stack fa-lg">
+          <i class="fa fa-globe fa-stack-1x text-primary"></i>
+          <i class="fa fa-ban fa-stack-2x text-danger"></i>
+        </a>
+      </h3>
+      <h4><a href="/~admin/policies">Policies</a></h4>
+      <hr>
+      {{ policy_count }} policies
+    </div>
+    <div class="col-sm-4">
+      <h3>
+        <a href="/~admin/shorturls" class="fa-stack fa-lg">
+          <i class="fa fa-circle fa-stack-2x text-muted"></i>
+          <i class="fa fa-link fa-stack-1x fa-inverse"></i>
+        </a>
+      </h3>
+      <h4><a href="/~admin/shorturls">Short links</a></h4>
+      <hr>
+      {{ shorturl_count }} links
+    </div>
+  </div>
+</div>
+{% endblock %}

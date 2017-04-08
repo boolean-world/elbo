@@ -1,0 +1,30 @@
+{
+    "require": {
+        "symfony/http-foundation": "^3.2",
+        "twig/twig": "^2.1",
+        "nikic/fast-route": "^1.2",
+        "sinergi/browser-detector": "^6.1",
+        "google/recaptcha": "^1.1",
+        "symfony/yaml": "^3.2",
+        "php-di/php-di": "^5.4",
+        "guzzlehttp/guzzle": "^6.2",
+        "symfony/console": "^3.2",
+        "doctrine/cache": "^1.6",
+        "illuminate/database": "^5.4",
+        "nette/mail": "^2.4",
+        "maxmind-db/reader": "^1.1",
+        "bacon/bacon-qr-code": "^1.0",
+        "symfony/filesystem": "^3.2"
+    },
+    "autoload": {
+    	"psr-4": {
+    		"Elbo\\": "app/"
+    	},
+        "files": [
+            "app/bootstrap_eloquent.php"
+        ]
+    },
+    "require-dev": {
+        "psy/psysh": "^0.8.1"
+    }
+}

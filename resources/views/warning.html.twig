@@ -1,0 +1,72 @@
+{% extends('layouts/app.html.twig') %}
+
+{% block head %}
+<title>Warning &mdash; elbo.in</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <br>
+  <div class="panel panel-primary">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-2">
+          <h1 class="centered-text">
+            {% if type == 1 or type == 7 %}
+            <span class="fa-stack fa-lg text-warning">
+              <i class="fa fa-circle-thin fa-stack-2x"></i>
+              <i class="fa fa-hand-paper-o fa-stack-1x"></i>
+            </span>
+            {% elseif type == 2 or type == 3 %}
+            <span class="fa-stack fa-lg text-danger">
+              <i class="fa fa-circle-thin fa-stack-2x"></i>
+              <i class="fa fa-hand-paper-o fa-stack-1x"></i>
+            </span>
+            {% endif %}
+          </h1>
+        </div>
+        <div class="col-sm-10">
+
+          {% if type == 1 %}
+          <h1 class="text-warning centered-text">Reported spam website</h1>
+          <p>The link you requested has been reported as a website containing spam and has been blocked.</p>
+          <p>Spam websites try to trick you into a fraudulent scheme (such as buying a fake product, investing in a fake finanicial scheme, or calling up a premium number). Information you enter on such websites may be used for other scams.</p>
+          <p>It is recommended that you close this browser window/tab.</p>
+          <hr>
+          <p>If you want to continue visiting the website anyway, click on the link below:</p>
+          <a href="{{ url }}">{{ url }}</a>
+
+          {% elseif type == 2 %}
+          <h1 class="text-danger centered-text">Reported malware website</h1>
+          <p>The link you requested has been reported as a website containing malware and has been blocked.</p>
+          <p>Malware is malicious software that steals your private information, uses your computer to attack others, serve unwanted ads, or damage the operation of your computer.</p>
+          <p>It is recommended that you close this browser window/tab.</p>
+          <hr>
+          <p>If you want to continue visiting the website anyway, click on the link below:</p>
+          <a href="{{ url }}">{{ url }}</a>
+
+          {% elseif type == 3 %}
+          <h1 class="text-danger centered-text">Reported phishing website</h1>
+          <p>The link you requested has been reported as a phishing website and has been blocked.</p>
+          <p>Phishing websites are designed to trick you into revealing personal information such as credit card details, bank account details or passwords.</p>
+          <p>Entering any information on such a website could lead to identity theft or other fraud.</p>
+          <p>It is recommended that you close this browser window/tab.</p>
+          <hr>
+          <p>If you want to continue visiting the website anyway, click on the link below:</p>
+          <a href="{{ url }}">{{ url }}</a>
+
+          {% elseif type == 7 %}
+          <h1 class="text-warning centered-text">Warning</h1>
+          <p>This link redirects to an URL redirection service (such as an URL shortener). You may be redirected to an unsafe website.</p>
+          <p>You can visit the website by clicking on the link below. However, <b>please use caution</b> while visiting it.</p>
+          <a href="{{ url }}">{{ url }}</a>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+{% endblock %}

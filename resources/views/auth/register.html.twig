@@ -1,0 +1,118 @@
+{% extends('layouts/app.html.twig') %}
+
+{% block head %}
+<title>Sign Up &mdash; elbo.in</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <div class="panel panel-default">
+        <div class="panel-heading">Sign Up</div>
+        <div class="panel-body">
+          <form class="form-horizontal" method="POST" action="/~signup">
+            <div class="form-group {% if errors.email is not null %}has-error{% endif %}">
+              <label for="email" class="col-md-4 control-label">E-Mail Address</label>
+
+              <div class="col-md-6">
+                <input id="email" type="email" class="form-control" name="email" value="{{ email }}" required autofocus>
+
+                {% if errors.email is not null %}
+                <span class="help-block">
+                  <strong>
+                    {% if errors.email == 2 %}
+                      That e-mail address is already registered.
+                    {% else %}
+                      Please enter a valid e-mail address.
+                    {% endif %}
+                  </strong>
+                </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-group {% if errors.password is not null %}has-error{% endif %}">
+              <label for="password" class="col-md-4 control-label">Password</label>
+
+              <div class="col-md-6">
+                <input id="password" type="password" class="form-control" name="password" required>
+
+                {% if errors.password is not null %}
+                <span class="help-block">
+                  <strong>Please enter a password that is at least 6 characters long.</strong>
+                </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-group {% if errors.password_confirm %}has-error{% endif %}">
+              <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
+
+              <div class="col-md-6">
+                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+
+                {% if errors.password_confirm %}
+                <span class="help-block">
+                  <strong>You did not enter the same password.</strong>
+                </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-group {% if errors.agree_tos %}has-error{% endif %}">
+              <div class="col-md-4"></div>
+
+              <div class="col-md-6">
+                <input type="checkbox" id="agree_tos_checkbox" name="agree_tos">
+                <label for="agree_tos_checkbox">
+                  I agree to the <a href="https://www.booleanworld.com/legal/">terms of service</a>
+                </label>
+
+                {% if errors.agree_tos %}
+                <span class="help-block">
+                  <strong>Please agree to the terms and conditions to continue.</strong>
+                </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-group {% if errors.captcha %}has-error{% endif %}">
+              <div class="col-md-4"></div>
+              <div class="col-md-6">
+                <div class="g-recaptcha" data-sitekey="{{ config('api_key.recaptcha_site_key') }}"></div>
+                {% if errors.captcha %}
+                <span class="help-block">
+                  <strong>You did not fill in the captcha correctly.</strong>
+                </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-6 col-md-offset-4">
+                <button type="submit" class="btn btn-primary">
+                  Register
+                </button>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4"></div>
+              <div class="col-md-6">
+                Already have an account? <a href="/~login">Login</a>.
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="https://www.google.com/recaptcha/api.js"></script>
+{% endblock %}

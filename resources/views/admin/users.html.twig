@@ -1,0 +1,129 @@
+{% extends('layouts/admin.html.twig') %}
+
+{% block head %}
+<title>Users &mdash; Admin Panel</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form>
+        <div class="row">
+          <div class="col-sm-3">
+            E-Mail<input name="email" type="text" class="form-control" value="{{ form.email }}">
+          </div>
+          <div class="col-sm-3">
+            Disabled
+            <select name="disabled" class="form-control">
+              <option value="0" {% if form.disabled == 0 %} selected {% endif %}>-</option>
+              <option value="1" {% if form.disabled == 1 %} selected {% endif %}>Yes</option>
+              <option value="2" {% if form.disabled == 2 %} selected {% endif %}>No</option>
+            </select>
+          </div>
+          <div class="col-sm-3">
+            Created from<input name="created_ip" type="text" class="form-control" value="{{ form.created_ip }}">
+          </div>
+          <div class="col-sm-3">
+            Last login from<input name="last_login_ip" type="text" class="form-control" value="{{ form.last_login_ip }}">
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-sm-8">
+            Use % and _ as wildcards.
+          </div>
+          <div class="col-sm-4">
+            <input class="btn btn-primary pull-right" type="submit" value="Search">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <table class="table adm-table users-table table-hover">
+    <thead>
+      <tr>
+        <th class="email-col">E-Mail</th>
+        <th class="created-col">Created</th>
+        <th class="login-col">Last login</th>
+        <th class="disabled-col">Disabled</th>
+        <th class="actions-col"></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for entry in entries %}
+      <tr {% if entry.disabled %}class="bg-danger"{% endif %}>
+        <td class="email-col">{{ entry.email }}</td>
+        <td class="created-col">
+          {{ entry.created_at | date("Y-m-d h:m:s") }}
+          <br>
+          {{ entry.created_from }}
+        </td>
+        <td class="login-col">
+          {{ entry.last_login | date("Y-m-d h:m:s") }}
+          <br>
+          {{ entry.last_login_ip }}
+        </td>
+        <td class="disabled-col">
+          {% if entry.disabled %}
+            Yes
+          {% else %}
+            No
+          {% endif %}
+        </td>
+        <td class="actions-col">
+          {% if entry.disabled %}
+          <a href="{{ url('/~admin/user/enable/' ~ entry.id, {
+            r_email: form.email,
+            r_disabled: form.disabled,
+            r_created_ip: form.created_ip,
+            r_last_login_ip: form.last_login_ip,
+            r_n: pagenum
+          }) }}" title="Enable user"><i class="fa fa-1_5x text-success fa-check"></i></a>
+          {% else %}
+          <a href="{{ url('/~admin/user/disable/' ~ entry.id, {
+            r_email: form.email,
+            r_disabled: form.disabled,
+            r_created_ip: form.created_ip,
+            r_last_login_ip: form.last_login_ip,
+            r_n: pagenum
+          }) }}" title="Disable user"><i class="fa fa-1_5x text-danger fa-ban"></i></a>
+          {% endif %}
+          <a href="{{ url('/~admin/user/delete/' ~ entry.id, {
+            r_domain: form.domain,
+            r_automated: form.automated,
+            r_policy: form.policy,
+            r_comment: form.comment,
+            r_n: pagenum
+          }) }}"><i title="Delete user" class="fa fa-1_5x text-danger fa-trash"></i></a>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="row">
+    <div class="col-xs-6">
+      {% if pagenum > 0 %}
+        <a href="{{ url('/~admin/users', {
+          domain: form.domain,
+          automated: form.automated,
+          policy: form.policy,
+          comment: form.comment,
+          n: pagenum - 1
+        }) }}" class="btn btn-default"><i class="fa fa-chevron-left"></i> Previous</a>
+      {% endif %}
+    </div>
+    <div class="col-xs-6">
+      {% if has_more %}
+        <a href="{{ url('/~admin/users', {
+          domain: form.domain,
+          automated: form.automated,
+          policy: form.policy,
+          comment: form.comment,
+          n: pagenum + 1
+        }) }}" class="btn btn-default pull-right">Next <i class="fa fa-chevron-right"></i></a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+<div class="form-group">
+  <input type="text" class="form-control" id="input-url" placeholder="Enter an URL to shorten..." maxlength="2048" autofocus>
+</div>
+<div class="form-group collapse" id="custom-url-options">
+  <div class="input-group">
+    <span class="input-group-addon"><b>elbo.in/</b></span>
+    <input type="text" class="form-control" id="custom-url" placeholder="Your custom URL here (optional)" maxlength="70">
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-7 col-sm-6" id="recaptcha-target" data-sitekey="{{ config('api_key.recaptcha_site_key') }}">
+  </div>
+  <div class="col-md-5 col-sm-6">
+    <button class="btn shared-button-set" data-toggle="collapse" data-target="#custom-url-options"><i class="fa fa-cog"></i> Custom URL</button>
+    <button class="btn btn-success pull-right shared-button-set" id="shorten-button"><i class="fa fa-check"></i> Shorten</button>
+  </div>
+</div>
+<div id="home-alert-message" class="alert fade in hidden alert-danger"></div>

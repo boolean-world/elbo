@@ -1,0 +1,165 @@
+{% extends('layouts/app.html.twig') %}
+
+{% block head %}
+<title>Your Account &mdash; elbo.in</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Your account</h1>
+
+      {% if success %}
+      <div class="alert alert-success alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        Account details updated.
+      </div>
+      {% endif %}
+
+      <div class="panel panel-default">
+        <div class="panel-heading">E-Mail</div>
+
+        <div class="panel-body">
+          <p>This is the e-mail address to which all e-mails will be sent, such as those for password reset requests.</p>
+
+          <form class="form-horizontal" method="POST" action="/~account">
+            <input type="hidden" name="action" value="email">
+
+            <div class="form-group {% if errors.email is not null %}has-error{% endif %}">
+              <label class="col-md-3 control-label" for="email">E-Mail Address</label>
+              <div class="col-md-9">
+                <input id="email" name="email" class="form-control" value="{{ login_email }}">
+
+                {% if errors.email is not null %}
+                  <span class="help-block">
+                    <strong>
+                      {% if errors.email == 2 %}
+                        That e-mail address is already registered.
+                      {% else %}
+                        Please enter a valid e-mail address.
+                      {% endif %}
+                    </strong>
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-6 col-md-offset-3">
+                <input type="submit" class="btn btn-primary" value="Update">
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+       <div class="panel panel-default">
+        <div class="panel-heading">Password</div>
+
+        <div class="panel-body">
+          <p>
+            Enter all the three fields below to change your password. If you've forgotten your
+            password, please log out and visit the login page. You will be offered to reset your
+            password there.
+          </p>
+
+          <form class="form-horizontal" method="POST" action="/~account">
+            <input type="hidden" name="action" value="password">
+
+            <div class="form-group {% if errors.password == 1 %}has-error{% endif %}">
+              <label class="col-md-3 control-label" for="old-password">Old Password</label>
+              <div class="col-md-9">
+                <input type="password" id="old-password" name="old_password" class="form-control">
+                {% if errors.password == 1 %}
+                <span class="help-block">
+                  <strong>You did not enter your old password correctly.</strong>
+                </span>
+              {% endif %}
+              </div>
+            </div>
+
+            <div class="form-group {% if errors.password == 2 or errors.password == 4 %}has-error{% endif %}">
+              <label class="col-md-3 control-label" for="new-password">New Password</label>
+              <div class="col-md-9">
+                <input type="password" id="new-password" name="new_password" class="form-control">
+                {% if errors.password == 2 %}
+                <span class="help-block">
+                  <strong>Please enter a password that is at least 6 characters long.</strong>
+                </span>
+                {% elseif errors.password == 4 %}
+                <span class="help-block">
+                  <strong>Your new password is the same as your old password.</strong>
+                </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-group {% if errors.password == 3 %}has-error{% endif %}">
+              <label class="col-md-3 control-label" for="new-password-confirm">Confirm new password</label>
+              <div class="col-md-9">
+                <input type="password" id="new-password-confirm" name="new_password_confirm" class="form-control">
+                {% if errors.password == 3 %}
+                <span class="help-block">
+                  <strong>You did not enter the same password.</strong>
+                </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-6 col-md-offset-3">
+                <input type="submit" class="btn btn-primary" value="Update">
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">Delete account</div>
+
+        <div class="panel-body">
+          <p>You can delete your account by clicking on the button below.</p>
+
+          <p>
+            Once you delete your account, you cannot register an account using the e-mail address you've used
+            to register here. Any short links you've created will keep working, though. (We do not delete
+            existing short links to prevent abuse.)
+          </p>
+
+          <p>Once you delete your account, there's no going back. Please be certain.</p>
+
+          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-modal">
+            Delete account
+          </button>
+        </div>
+      </div>
+ 
+    </div>
+  </div>
+</div>
+
+<div id="delete-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Confirm account deletion</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete your account?</p>
+        <p class="uppercase"><b>Please note that this cannot be undone.</b></p>
+      </div>
+      <div class="modal-footer">
+        <a href="/~account/delete" class="btn btn-danger">Yes</a>
+        <a class="btn btn-default" data-dismiss="modal">No</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

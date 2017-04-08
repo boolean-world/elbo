@@ -1,0 +1,42 @@
+# Please be careful while editing this configuration, a wrong
+# configuration can lock you out of this application!
+
+environment:
+  phase: development
+  analytics: false
+
+# Details of the database used.
+database:
+  # For sqlite:
+  # driver: sqlite
+  # database: data/db.sqlite
+  # For mysql:
+  driver: mysql
+  host: host
+  database: database
+  username: username
+  password: password
+  charset: utf8
+  collation: utf8_general_ci
+  prefix: elbo_
+
+# Redis details
+redis:
+  host: 127.0.0.1
+  port: 6379
+
+# Various configurable keys for APIs and services.
+api_key:
+  recaptcha_site_key: null
+  recaptcha_secret_key: null
+  google_analytics_key: null
+
+# Mailer configuration
+mailer:
+  from: test@example.com
+  smtp:
+    host: smtp.example.com
+    username: test@example.com
+    password: correct horse battery staple
+    secure: tls
+    port: 587

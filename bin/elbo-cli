@@ -1,0 +1,29 @@
+#!/usr/bin/php
+<?php
+
+chdir(__DIR__.'/..');
+
+require_once 'vendor/autoload.php';
+
+bootstrap_eloquent(new Elbo\Library\Configuration());
+
+$cmdclassnames = [
+	Elbo\Commands\ServeCommand::class,
+	Elbo\Commands\CleanCommand::class,
+	Elbo\Commands\TemplatesCleanCommand::class,
+	Elbo\Commands\RoutesCleanCommand::class,
+	Elbo\Commands\ConfigCleanCommand::class,
+	Elbo\Commands\TempFilesCleanCommand::class,
+	Elbo\Commands\MigrationsInstallCommand::class,
+	Elbo\Commands\MigrationsRemoveCommand::class,
+	Elbo\Commands\UpdatePoliciesCommand::class,
+	Elbo\Commands\CreateAdminCommand::class
+];
+
+$app = new Symfony\Component\Console\Application('Command-line tool for managing Elbo');
+
+foreach ($cmdclassnames as $cmdclassname) {
+	$app->add(new $cmdclassname);
+}
+
+$app->run();

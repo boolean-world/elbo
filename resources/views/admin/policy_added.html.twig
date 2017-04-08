@@ -1,0 +1,19 @@
+{% extends('layouts/admin.html.twig') %}
+
+{% block head %}
+<title>Policy added &mdash; Admin Panel</title>
+<meta http-equiv="refresh" content="3; url={{ url('/~admin/policies', {
+  domain: r_domain,
+  automated: r_automated,
+  policy: r_policy,
+  comment: r_comment,
+  n: r_n
+}) }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h3>The policy was added.</h3>
+  <p>Redirecting to the previous page in a few seconds...</p>
+</div>
+{% endblock %}

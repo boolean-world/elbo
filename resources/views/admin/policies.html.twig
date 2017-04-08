@@ -1,0 +1,141 @@
+{% extends('layouts/admin.html.twig') %}
+
+{% block head %}
+<title>Domain Policies &mdash; Admin Panel</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form>
+        <div class="row">
+          <div class="col-sm-3">
+            Domain<input name="domain" type="text" class="form-control" value="{{ form.domain }}">
+          </div>
+          <div class="col-sm-3">
+            Automated
+            <select name="automated" class="form-control">
+              <option value="0" {% if form.automated == 0 %} selected {% endif %}>-</option>
+              <option value="1" {% if form.automated == 1 %} selected {% endif %}>Yes</option>
+              <option value="2" {% if form.automated == 2 %} selected {% endif %}>No</option>
+            </select>
+          </div>
+          <div class="col-sm-3">
+            Policy
+            <select name="policy" class="form-control">
+              <option value="0" {% if form.policy == 0 %} selected {% endif %}>-</option>
+              <option value="1" {% if form.policy == 1 %} selected {% endif %}>Allowed</option>
+              <option value="2" {% if form.policy == 2 %} selected {% endif %}>Blocked (Spam)</option>
+              <option value="3" {% if form.policy == 3 %} selected {% endif %}>Blocked (Malware)</option>
+              <option value="4" {% if form.policy == 4 %} selected {% endif %}>Blocked (Phishing)</option>
+              <option value="5" {% if form.policy == 5 %} selected {% endif %}>Blocked (PII)</option>
+              <option value="6" {% if form.policy == 6 %} selected {% endif %}>Blocked (Child abuse)</option>
+              <option value="7" {% if form.policy == 7 %} selected {% endif %}>Blocked (Violent crimes)</option>
+              <option value="8" {% if form.policy == 8 %} selected {% endif %}>Blocked (Redirector)</option>
+            </select>
+          </div>
+          <div class="col-sm-3">
+            Comment<input name="comment" type="text" class="form-control" value="{{ form.comment }}">
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-sm-8">
+            Use % and _ as wildcards.
+          </div>
+          <div class="col-sm-4">
+            <a class="btn btn-info shared-button-set" href="{{ url ('/~admin/policy/new', {
+              r_domain: form.domain,
+              r_automated: form.automated,
+              r_policy: form.policy,
+              r_comment: form.comment,
+              r_n: pagenum
+            }) }}"><i class="fa fa-plus"></i> Add policy</a>
+            <input class="btn btn-primary shared-button-set pull-right" type="submit" value="Search">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <table class="table adm-table policies-table table-hover">
+    <thead>
+      <tr>
+        <th class="domain-col">Domain</th>
+        <th class="automated-col">Automated</th>
+        <th class="policy-col">Policy</th>
+        <th class="comment-col">Comment</th>
+        <th class="actions-col"></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for entry in entries %}
+      <tr {% if entry.disabled %} class="bg-danger" {% endif %}>
+        <td class="domain-col">{{ entry.domain }}</td>
+        <td class="automated-col">{% if entry.automated %} Yes {% else %} No {% endif %}</td>
+        <td class="policy-col">
+          {% if entry.policy == 0 %}
+            Allowed
+          {% elseif entry.policy == 1 %}
+            Blocked (Spam)
+          {% elseif entry.policy == 2 %}
+            Blocked (Malware)
+          {% elseif entry.policy == 3 %}
+            Blocked (Phishing)
+          {% elseif entry.policy == 4 %}
+            Blocked (PII)
+          {% elseif entry.policy == 5 %}
+            Blocked (Child abuse)
+          {% elseif entry.policy == 6 %}
+            Blocked (Violent crime)
+          {% elseif entry.policy == 7 %}
+            Blocked (Redirector)
+          {% endif %}
+        </td>
+        <td class="comment-col">{{ entry.comment }}</td>
+        <td class="actions-col">
+          <a href="{{ url('/~admin/policy/edit/' ~ entry.domain, {
+            r_domain: form.domain,
+            r_automated: form.automated,
+            r_policy: form.policy,
+            r_comment: form.comment,
+            r_n: pagenum
+          }) }}" title="Edit policy"><i class="fa fa-1_5x text-info fa-pencil"></i></a>
+          <a href="{{ url('/~admin/policy/delete/' ~ entry.domain, {
+            r_domain: form.domain,
+            r_automated: form.automated,
+            r_policy: form.policy,
+            r_comment: form.comment,
+            r_n: pagenum
+          }) }}"><i title="Delete policy" class="fa fa-1_5x text-danger fa-trash"></i></a>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="row">
+    <div class="col-xs-6">
+      {% if pagenum > 0 %}
+        <a href="{{ url('/~admin/policies', {
+          domain: form.domain,
+          automated: form.automated,
+          policy: form.policy,
+          comment: form.comment,
+          n: pagenum - 1
+        }) }}" class="btn btn-default"><i class="fa fa-chevron-left"></i> Previous</a>
+      {% endif %}
+    </div>
+    <div class="col-xs-6">
+      {% if has_more %}
+        <a href="{{ url('/~admin/policies', {
+          domain: form.domain,
+          automated: form.automated,
+          policy: form.policy,
+          comment: form.comment,
+          n: pagenum + 1
+        }) }}" class="btn btn-default pull-right">Next <i class="fa fa-chevron-right"></i></a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

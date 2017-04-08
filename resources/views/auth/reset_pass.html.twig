@@ -1,0 +1,57 @@
+{% extends('layouts/app.html.twig') %}
+
+{% block head %}
+<title>Reset Password &mdash; elbo.in</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <div class="panel panel-default">
+        <div class="panel-heading">Reset Password</div>
+
+        <div class="panel-body">
+          <form class="form-horizontal" method="POST" action="/~password/reset/{{ token }}">
+            <div class="form-group {% if errors.password %}has-error{% endif %}">
+              <label for="password" class="col-md-4 control-label">New Password</label>
+
+              <div class="col-md-6">
+                <input id="password" type="password" class="form-control" name="password" required autofocus>
+
+                {% if errors.password %}
+                  <span class="help-block">
+                    <strong>Please enter a password that is at least 6 characters long.</strong>
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-group {% if errors.password_confirm %}has-error{% endif %}">
+              <label for="password-confirm" class="col-md-4 control-label">Confirm new password</label>
+
+              <div class="col-md-6">
+                <input type="password" id="password-confirm" class="form-control" name="password_confirm" required>
+
+                {% if errors.password_confirm %}
+                  <span class="help-block">
+                    <strong>You did not enter the same password.</strong>
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-6 col-md-offset-4">
+                <button type="submit" class="btn btn-primary">
+                  Reset Password
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
