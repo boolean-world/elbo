@@ -49,6 +49,7 @@
     ga('create', '{{ config('api_key.google_analytics_key') }}', 'auto');
     ga('send', 'pageview');
   </script>
+  {% endif %}
   {% block js %}
   {% endblock %}
 </body>
