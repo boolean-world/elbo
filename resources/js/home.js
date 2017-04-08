@@ -183,36 +183,30 @@ function addCard(data) {
 	var fb_share_icon = $("<a/>", {
 		"class": "fa fa-2_5x fa-facebook-square",
 		"href": "https://www.facebook.com/sharer/sharer.php?u=" + shorturl,
-		"title": "Share on Facebook"
+		"title": "Share on Facebook",
+		"target": "_blank"
 	});
 
 	var twitter_share_icon = $("<a/>", {
 		"class": "fa fa-2_5x fa-twitter-square",
-		"href": "https://twitter.com/home?status=" + shorturl,
-		"title": "Share on Twitter"
+		"href": "https://twitter.com/share?url=" + shorturl,
+		"title": "Share on Twitter",
+		"target": "_blank"
 	});
 
 	var gplus_share_icon = $("<a/>", {
 		"class": "fa fa-2_5x fa-google-plus-square",
 		"href": "https://plus.google.com/share?url=" + shorturl,
-		"title": "Share on Google Plus"
+		"title": "Share on Google Plus",
+		"target": "_blank"
 	});
-
-	if (/Android|iPhone/.test(navigator.userAgent)) {
-		var whatsapp_share_icon = $("<a/>", {
-			"class": "fa fa-2_5x fa-whatsapp",
-			"href": "whatsapp://send=" + enc_url,
-			"data-action": "share/whatsapp/share",
-			"title": "Share via Whatsapp"
-		});
-	}
 
 	var mobile_row = $("<div/>", {
 		"class": "row visible-xs"
 	});
 
-	var mobile_left_col = $("<div/>", {
-		"class": "col-xs-5 mobile-action-icons"
+	var mobile_container = $("<div/>", {
+		"class": "col-xs-12 mobile-action-icons"
 	});
 
 	var mobile_qrcode_button = $("<a/>", {
@@ -225,14 +219,39 @@ function addCard(data) {
 		"href": "/~analytics/" + data.shorturl
 	});
 
-	right_col.append(fb_share_icon).append(twitter_share_icon).append(gplus_share_icon).append(whatsapp_share_icon);
-	bottom_row.append(left_col).append(right_col);
+	right_col.append(fb_share_icon)
+	         .append(twitter_share_icon)
+	         .append(gplus_share_icon);
 
-	mobile_left_col.append(mobile_qrcode_button).append(mobile_analytics_button);
-	mobile_row.append(mobile_left_col).append(right_col.clone());
-	panelfooter.append(bottom_row).append(mobile_row);
+	bottom_row.append(left_col)
+	          .append(right_col);
 
-	panel.append(panelbody).append(panelfooter);
+	mobile_container.append(mobile_qrcode_button)
+	                .append(mobile_analytics_button)
+	                .append(fb_share_icon.clone())
+	                .append(twitter_share_icon.clone())
+	                .append(gplus_share_icon.clone());
+
+	if (/Android|iPhone/.test(navigator.userAgent)) {
+		var whatsapp_share_icon = $("<a/>", {
+			"class": "fa fa-2_5x fa-whatsapp",
+			"href": "whatsapp://send?text=" + enc_url,
+			"data-action": "share/whatsapp/share",
+			"title": "Share via Whatsapp"
+		});
+
+		right_col.append(whatsapp_share_icon);
+		mobile_container.append(whatsapp_share_icon.clone());
+	}
+
+	mobile_row.append(mobile_container);
+
+	panelfooter.append(bottom_row)
+	           .append(mobile_row);
+
+	panel.append(panelbody)
+	     .append(panelfooter);
+
 	list.prepend(panel);
 
 	$("#shortened-urls-container").removeClass("hidden");

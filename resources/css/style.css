@@ -275,27 +275,31 @@ a.unstyled-link:hover {
 }
 
 .mobile-action-icons a {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 .share-icons a {
   margin-left: 2px;
 }
 
-.share-icons a.fa-facebook-square {
-	color: #3B5998;
+.share-icons a.fa-facebook-square,
+.mobile-action-icons a.fa-facebook-square {
+	color: #3B5998 !important;
 }
 
-.share-icons a.fa-google-plus-square {
-	color: #DC4E40;
+.share-icons a.fa-google-plus-square,
+.mobile-action-icons a.fa-google-plus-square {
+	color: #DC4E40 !important;
 }
 
-.share-icons a.fa-twitter-square {
-	color: #00BFF6;
+.share-icons a.fa-twitter-square,
+.mobile-action-icons a.fa-twitter-square {
+	color: #00BFF6 !important;
 }
 
-.share-icons a.fa-whatsapp {
-	color: #1EBEA5;
+.share-icons a.fa-whatsapp,
+.mobile-action-icons a.fa-whatsapp {
+	color: #1EBEA5 !important;
 }
 
 .qrcode-container img {

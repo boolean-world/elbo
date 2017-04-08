@@ -10,77 +10,77 @@ The following instructions discuss installation on Debian (and Debian derived sy
 
 * Run the following commands to install the core dependencies:
 
-	sudo apt update
-	sudo apt install git redis-server php-curl php-fpm php-cli php-mbstring php-intl nginx nodejs npm
-	which node || sudo ln -s /usr/bin/nodejs /usr/bin/node
+		sudo apt update
+		sudo apt install git redis-server php-curl php-fpm php-cli php-mbstring php-intl nginx nodejs npm
+		which node || sudo ln -s /usr/bin/nodejs /usr/bin/node
 
 * Install composer:
 
-	wget https://getcomposer.org/installer
-	php installer
-	mkdir -p ~/.local/bin
-	mv composer.phar ~/.local/bin
-	echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.bashrc
-	. ~/.bashrc
+		wget https://getcomposer.org/installer
+		php installer
+		mkdir -p ~/.local/bin
+		mv composer.phar ~/.local/bin
+		echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.bashrc
+		. ~/.bashrc
 
 * Clone the repository, and move to the cloned folder:
 
-	git clone https://gitlab.com/fluorolime/elbo.git
-	cd elbo
+		git clone https://gitlab.com/fluorolime/elbo.git
+		cd elbo
 
 * Pull in the PHP and JS dependencies:
 
-	composer install
-	npm install
+		composer install
+		npm install
 
 * Install the MaxMind GeoLite2 Country database.
 
-	wget http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.mmdb.gz -O data/GeoLite2-Country.mmdb.gz
-	gzip -d data/GeoLite2-Country.mmdb.gz
+		wget http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.mmdb.gz -O data/GeoLite2-Country.mmdb.gz
+		gzip -d data/GeoLite2-Country.mmdb.gz
 
 * Copy `data/config/elbo.sample.yml` to `data/config/elbo.yml` and change the required values. Most importantly, `environment.phase` should be set to `production` and the values in the `api_key` section should be set.
 
 * Create the database tables:
 
-	./bin/elbo-cli migrations:install
+		./bin/elbo-cli migrations:install
 
 * Build the assets:
 
-	./node_modules/.bin/gulp
+		./node_modules/.bin/gulp
 
 * Set the ownership of the files to the user under which the webserver runs:
 
-	sudo chown -R www-data: .
+		sudo chown -R www-data: .
 
 * Add/edit a file in `/etc/nginx/sites-available/*` to serve the website. The minimal configuration is as follows:
 
-	server {
-		listen 80;
-		listen [::]:80;
+		server {
+			listen 80;
+			listen [::]:80;
 
-		root /path/to/elbo/public;
+			root /path/to/elbo/public;
 
-		location /~qr/files {
-			alias /path/to/elbo/data/tmp/qr;
+			location /~qr/files {
+				alias /path/to/elbo/data/tmp/qr;
 
-			internal;
-			expires 1d;
-			add_header Pragma public;
-			add_header Cache-Control "public";
+				internal;
+				expires 1d;
+				add_header Pragma public;
+				add_header Cache-Control "public";
+			}
+
+			location ~ ^/(?:assets|robots\.txt$) {
+				expires 1d;
+				add_header Pragma public;
+				add_header Cache-Control "public";
+			}
+
+			location / {
+				include fastcgi_params;
+				fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+				fastcgi_param SCRIPT_FILENAME /path/to/elbo/public/index.php;
+			}
 		}
-
-		location ~ ^/(?:assets|robots\.txt$) {
-			expires 1d;
-			add_header Pragma public;
-			add_header Cache-Control "public";
-		}
-
-		location / {
-			include fastcgi_params;
-			fastcgi_pass unix:/run/php/php7.0-fpm.sock;
-			fastcgi_param SCRIPT_FILENAME /path/to/elbo/public/index.php;
-		}
-	}
 
 Elbo should be now up and running! Have a look at the usage section for further instructions.
 
