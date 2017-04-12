@@ -83,7 +83,7 @@ The following instructions discuss installation on Debian (and Debian derived sy
 				add_header Cache-Control "public";
 			}
 
-			location ~ ^/(?:assets|robots\.txt$) {
+			location ~ ^/assets/ {
 				expires 1d;
 				add_header Pragma public;
 				add_header Cache-Control "public";
