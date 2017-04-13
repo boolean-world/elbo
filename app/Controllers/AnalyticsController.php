@@ -9,11 +9,13 @@ use Symfony\Component\HttpFoundation\{Request, Response};
 
 class AnalyticsController extends Controller {
 	use \Elbo\Middlewares\Session;
+	use \Elbo\Middlewares\PersistLogin;
 	use \Elbo\Middlewares\RedirectIfLoggedOut;
 	use \Elbo\Middlewares\ShortURLVerified;
 
 	protected $middlewares = [
 		'manageSession',
+		'persistLogin',
 		'redirectIfLoggedOut',
 		'shortURLVerified'
 	];

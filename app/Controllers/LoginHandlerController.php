@@ -3,16 +3,18 @@
 namespace Elbo\Controllers;
 
 use ReCaptcha\ReCaptcha;
-use Elbo\{Library\Controller, Models\User, RateLimiters\LoginRateLimiter};
-use Symfony\Component\HttpFoundation\{Request, Response, RedirectResponse};
+use Symfony\Component\HttpFoundation\{Request, Response, RedirectResponse, Cookie};
+use Elbo\{Library\Controller, Models\User, Models\RememberToken, RateLimiters\LoginRateLimiter};
 
 class LoginHandlerController extends Controller {
 	use \Elbo\Middlewares\Session;
+	use \Elbo\Middlewares\PersistLogin;
 	use \Elbo\Middlewares\CSRFProtected;
 	use \Elbo\Middlewares\RedirectIfLoggedIn;
 
 	protected $middlewares = [
 		'manageSession',
+		'persistLogin',
 		'redirectIfLoggedIn',
 		'csrfProtected'
 	];
@@ -63,11 +65,19 @@ class LoginHandlerController extends Controller {
 			$this->session->regenerate();
 		}
 
+		$time = time();
+
 		$this->session->set('userid', $user->id);
-		$user->last_login = time();
+		$user->last_login = $time;
 		$user->last_login_ip = $request->getClientIp();
 		$user->save();
 
-		return new RedirectResponse('/');
+		$response = new RedirectResponse('/');
+
+		if ($request->request->get('remember_me')) {
+			$response->headers->setCookie(new Cookie('remembertoken', RememberToken::createFor($user->id), $time + 2592000));
+		}
+
+		return $response;
 	}
 }

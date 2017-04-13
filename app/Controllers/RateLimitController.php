@@ -7,9 +7,11 @@ use Elbo\{Library\Controller, RateLimiters\UserShortenRateLimiter, RateLimiters\
 
 class RateLimitController extends Controller {
 	use \Elbo\Middlewares\Session;
+	use \Elbo\Middlewares\PersistLogin;
 
 	protected $middlewares = [
-		'manageSession'
+		'manageSession',
+		'persistLogin'
 	];
 
 	public function run(Request $request, array &$data) {

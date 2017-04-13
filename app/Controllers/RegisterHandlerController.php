@@ -3,16 +3,18 @@
 namespace Elbo\Controllers;
 
 use ReCaptcha\ReCaptcha;
-use Elbo\{Library\Controller, Models\User, Library\Email};
-use Symfony\Component\HttpFoundation\{Request, Response, RedirectResponse};
+use Elbo\{Library\Controller, Models\User, Models\RememberToken, Library\Email};
+use Symfony\Component\HttpFoundation\{Request, Response, RedirectResponse, Cookie};
 
 class RegisterHandlerController extends Controller {
 	use \Elbo\Middlewares\Session;
+	use \Elbo\Middlewares\PersistLogin;
 	use \Elbo\Middlewares\CSRFProtected;
 	use \Elbo\Middlewares\RedirectIfLoggedIn;
 
 	protected $middlewares = [
 		'manageSession',
+		'persistLogin',
 		'redirectIfLoggedIn',
 		'csrfProtected'
 	];
@@ -22,7 +24,6 @@ class RegisterHandlerController extends Controller {
 
 		$email = $request->request->get('email');
 		$password = $request->request->get('password');
-		$agree_tos = $request->request->get('agree_tos');
 		$grecaptcha_resp = $request->request->get('g-recaptcha-response');
 		$password_confirm = $request->request->get('password_confirmation');
 
@@ -61,7 +62,7 @@ class RegisterHandlerController extends Controller {
 			$errors['email'] = 1;
 		}
 
-		if (!$agree_tos) {
+		if (!$request->request->get('agree_tos')) {
 			$errors['agree_tos'] = true;
 		}
 
@@ -94,6 +95,10 @@ class RegisterHandlerController extends Controller {
 		}
 
 		$this->session->set('userid', $user->id);
-		return new RedirectResponse('/');
+
+		$response = new RedirectResponse('/');
+		$response->headers->setCookie(new Cookie('remembertoken', RememberToken::createFor($user->id), $time + 2592000));
+
+		return $response;
 	}
 }

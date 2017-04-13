@@ -9,10 +9,12 @@ use Symfony\Component\HttpFoundation\{Request, Response, JsonResponse};
 
 class ShortenController extends Controller {
 	use \Elbo\Middlewares\Session;
+	use \Elbo\Middlewares\PersistLogin;
 	use \Elbo\Middlewares\ShortenRateLimited;
 
 	protected $middlewares = [
 		'manageSession',
+		'persistLogin',
 		'shortenRateLimited'
 	];
 

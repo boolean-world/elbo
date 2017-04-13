@@ -7,10 +7,12 @@ use Symfony\Component\HttpFoundation\{Request, Response};
 
 class PasswordResetPageController extends Controller {
 	use \Elbo\Middlewares\Session;
+	use \Elbo\Middlewares\PersistLogin;
 	use \Elbo\Middlewares\RedirectIfLoggedIn;
 
 	protected $middlewares = [
 		'manageSession',
+		'persistLogin',
 		'redirectIfLoggedIn'
 	];
 

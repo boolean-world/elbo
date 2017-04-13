@@ -5,7 +5,7 @@ namespace Elbo\Library;
 use Elbo\Exceptions\SessionException;
 
 class Session {
-	const MAX_PERMITTED_LASTSEEN_RANGE = 608400;
+	const MAX_PERMITTED_LASTSEEN_RANGE = 43200;
 	const prefix = 'elbo:sess:';
 
 	protected $sessionId;
@@ -133,9 +133,9 @@ class Session {
 			throw new SessionException('Cannot save data for a session that has not been started.');
 		}
 
-		$key = self::prefix.$this->sessionId;
-
 		if ($this->dirty) {
+			$key = self::prefix.$this->sessionId;
+
 			$ttl = $this->redis->ttl($key);
 			$this->redis->set($key, serialize($this->sessionData));
 			$this->redis->setTimeout($key, $ttl);

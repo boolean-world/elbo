@@ -7,10 +7,12 @@ use Elbo\{Library\Controller, RateLimiters\LoginRateLimiter};
 
 class LoginPageController extends Controller {
 	use \Elbo\Middlewares\Session;
+	use \Elbo\Middlewares\PersistLogin;
 	use \Elbo\Middlewares\RedirectIfLoggedIn;
 
 	protected $middlewares = [
 		'manageSession',
+		'persistLogin',
 		'redirectIfLoggedIn'
 	];
 

@@ -25,7 +25,7 @@ The following instructions discuss installation on Debian (and Debian derived sy
 * Run the following commands to install the core dependencies:
 
 		sudo apt update
-		sudo apt install git redis-server php-curl php-fpm php-cli php-mbstring php-intl nginx nodejs npm
+		sudo apt install git redis-server php-curl php-fpm php-gmp php-cli php-mbstring php-intl nginx nodejs npm
 		which node || sudo ln -s /usr/bin/nodejs /usr/bin/node
 
 * Install composer:

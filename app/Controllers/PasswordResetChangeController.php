@@ -7,11 +7,13 @@ use Elbo\{Library\Controller, Models\User, Models\PasswordReset};
 
 class PasswordResetChangeController extends Controller {
 	use \Elbo\Middlewares\Session;
+	use \Elbo\Middlewares\PersistLogin;
 	use \Elbo\Middlewares\CSRFProtected;
 	use \Elbo\Middlewares\RedirectIfLoggedIn;
 
 	protected $middlewares = [
 		'manageSession',
+		'persistLogin',
 		'redirectIfLoggedIn',
 		'csrfProtected'
 	];

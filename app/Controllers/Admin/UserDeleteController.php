@@ -7,11 +7,13 @@ use Elbo\{Models\User, Models\ShortenHistory, Library\Controller};
 
 class UserDeleteController extends Controller {
 	use \Elbo\Middlewares\Session;
+	use \Elbo\Middlewares\PersistLogin;
 	use \Elbo\Middlewares\NotFoundIfNotAdmin;
 	use \Elbo\Middlewares\CSRFProtected;
 
 	protected $middlewares = [
 		'manageSession',
+		'persistLogin',
 		'notFoundIfNotAdmin',
 		'csrfProtected'
 	];

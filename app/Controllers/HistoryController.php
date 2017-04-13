@@ -8,9 +8,11 @@ use Elbo\{Models\ShortenHistory, Models\Stats, Library\Controller};
 
 class HistoryController extends Controller {
 	use \Elbo\Middlewares\Session;
+	use \Elbo\Middlewares\PersistLogin;
 
 	protected $middlewares = [
-		'manageSession'
+		'manageSession',
+		'persistLogin'
 	];
 
 	public function run(Request $request, array &$data) {

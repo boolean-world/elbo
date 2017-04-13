@@ -11,10 +11,12 @@ use Symfony\Component\HttpFoundation\{Request, Response, RedirectResponse};
 
 class RedirectController extends Controller {
 	use \Elbo\Middlewares\Session;
+	use \Elbo\Middlewares\PersistLogin;
 	use \Elbo\Middlewares\ShortURLVerified;
 
 	protected $middlewares = [
 		'manageSession',
+		'persistLogin',
 		'shortURLVerified'
 	];
 

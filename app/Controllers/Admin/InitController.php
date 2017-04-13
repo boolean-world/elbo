@@ -7,10 +7,12 @@ use Elbo\{Models\DomainPolicy, Models\User, Models\ShortURL, Library\Controller}
 
 class InitController extends Controller {
 	use \Elbo\Middlewares\Session;
+	use \Elbo\Middlewares\PersistLogin;
 	use \Elbo\Middlewares\NotFoundIfNotAdmin;
 
 	protected $middlewares = [
 		'manageSession',
+		'persistLogin',
 		'notFoundIfNotAdmin'
 	];
 

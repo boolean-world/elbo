@@ -7,11 +7,13 @@ use Elbo\{Library\Controller, Models\User, Library\Email};
 
 class AccountController extends Controller {
 	use \Elbo\Middlewares\Session;
+	use \Elbo\Middlewares\PersistLogin;
 	use \Elbo\Middlewares\PostCSRFProtected;
 	use \Elbo\Middlewares\RedirectIfLoggedOut;
 
 	protected $middlewares = [
 		'manageSession',
+		'persistLogin',
 		'redirectIfLoggedOut',
 		'postCSRFProtected'
 	];
