@@ -126,7 +126,8 @@ function addCard(data) {
 
 	var short_link = $("<a/>", {
 		"class": "link-href",
-		"href": shorturl
+		"href": shorturl,
+		"target": "_blank"
 	}).text(shorturl);
 
 	link_details.append(link_title).append(original_link).append(short_link);
@@ -171,7 +172,8 @@ function addCard(data) {
 
 	var qrcode_button = $("<a/>", {
 		"class": "btn btn-default",
-		"href": "/~qr/" + data.shorturl
+		"href": "/~qr/" + data.shorturl,
+		"target": "_blank"
 	}).html('<i class="fa fa-qrcode"></i> Get QR code');
 
 	left_col.append(copy_button).append(qrcode_button);
