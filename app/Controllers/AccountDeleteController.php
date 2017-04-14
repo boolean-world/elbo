@@ -13,7 +13,7 @@ class AccountDeleteController extends Controller {
 
 	protected $middlewares = [
 		'manageSession',
-		'persistLogin'
+		'persistLogin',
 		'redirectIfLoggedOut',
 		'csrfProtected'
 	];
