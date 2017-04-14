@@ -49,8 +49,7 @@ The following instructions discuss installation on Debian (and Debian derived sy
 
 * Install the MaxMind GeoLite2 Country database.
 
-		wget http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.mmdb.gz -O data/GeoLite2-Country.mmdb.gz
-		gzip -d data/GeoLite2-Country.mmdb.gz
+		./bin/elbo-cli update:geoip
 
 * Copy `data/config/elbo.sample.yml` to `data/config/elbo.yml` and change the required values. Most importantly, `environment.phase` should be set to `production` and the values in the `api_key` section should be set.
 
@@ -108,11 +107,10 @@ The administration panel will be available at `http://<your_server_name>/~admin`
 
 If you want to block known malicious websites, you can do this by running:
 
-	./bin/elbo-cli update-policy
+	./bin/elbo-cli update:policies
 
 (You can set up a cron job that does this automatically once a day.)
 
 If you want to block users using disposable email addresses, you can do this by:
 
-	cpan install Regexp::Assemble
-	./bin/disposable_email.plx > data/config/forbidden-email-regex
+	./bin/elbo-cli update:dispemail

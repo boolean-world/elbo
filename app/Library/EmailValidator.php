@@ -2,8 +2,11 @@
 
 namespace Elbo\Library;
 
-class Email {
-	public static function normalize($email) {
+class EmailValidator {
+	private $validation_closure = null;
+	private $validation_file_checked = false;
+
+	public function normalize($email) {
 		if (!preg_match('/^(.*)@(.*)$/', $email, $matches)) {
 			throw new \InvalidArgumentException('Invalid email address');
 		}
@@ -45,14 +48,38 @@ class Email {
 		return $rv;
 	}
 
-	public static function isAllowed($email) {
-		$rgx_file = __DIR__.'/../../data/config/forbidden-email-regex';
-
-		if (!file_exists($rgx_file)) {
-			return true;
+	public function isAllowed($email) {
+		if (strlen($email) > 255) {
+			return false;
 		}
 
-		$rgx = file_get_contents($rgx_file);
-		return (preg_match($rgx, $email) !== 1);
+		if ($this->validation_closure === null) {
+
+			if ($this->validation_file_checked) {
+				// File doesn't exist, no point in further checking.
+				return true;
+			}
+
+			$rgx_file = __DIR__.'/../../data/disposable-email-domains';
+
+			if (file_exists($rgx_file)) {
+				$this->validation_closure = require $rgx_file;
+			}
+			else {
+				return true;
+			}
+
+			$this->validation_file_checked = true;
+		}
+
+		$domain = strrchr($email, '@');
+
+		if ($domain === false) {
+			return false;
+		}
+
+		$domain = substr($domain, 1);
+
+		return ($this->validation_closure)($domain);
 	}
 }

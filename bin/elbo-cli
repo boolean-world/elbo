@@ -17,6 +17,8 @@ $cmdclassnames = [
 	Elbo\Commands\MigrationsInstallCommand::class,
 	Elbo\Commands\MigrationsRemoveCommand::class,
 	Elbo\Commands\UpdatePoliciesCommand::class,
+	Elbo\Commands\UpdateGeoIPCommand::class,
+	Elbo\Commands\UpdateDispEmailCommand::class,
 	Elbo\Commands\CreateAdminCommand::class
 ];
 

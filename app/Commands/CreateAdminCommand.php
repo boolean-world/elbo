@@ -2,7 +2,7 @@
 
 namespace Elbo\Commands;
 
-use Elbo\{Library\Email, Models\User};
+use Elbo\{Library\EmailValidator, Models\User};
 use Symfony\Component\Console\{Command\Command, Input\InputInterface, Output\OutputInterface, Question\Question, Helper\QuestionHelper};
 
 class CreateAdminCommand extends Command {
@@ -14,14 +14,15 @@ class CreateAdminCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$helper = new QuestionHelper();
+		$emailvalidator = new EmailValidator();
 
 		$emailQuestion = new Question('E-Mail address: ');
 		$emailQuestion->setMaxAttempts(3);
 		$emailQuestion->setNormalizer(function($value) {
 			return trim($value);
 		});
-		$emailQuestion->setValidator(function($value) {
-			if (User::where('normalized_email', Email::normalize($value))->count() !== 0) {
+		$emailQuestion->setValidator(function($value) use ($emailvalidator) {
+			if (User::where('normalized_email', $emailvalidator->normalize($value))->count() !== 0) {
 				throw new \RuntimeException("This e-mail address is already registered.");
 			}
 
@@ -45,7 +46,7 @@ class CreateAdminCommand extends Command {
 
 		User::create([
 			'email' => $email,
-			'normalized_email' => Email::normalize($email),
+			'normalized_email' => $emailvalidator->normalize($email),
 			'password' => password_hash($password, PASSWORD_DEFAULT),
 			'created_from' => '127.0.0.1',
 			'created_at' => $time,

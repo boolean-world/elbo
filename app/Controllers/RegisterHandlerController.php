@@ -3,8 +3,8 @@
 namespace Elbo\Controllers;
 
 use ReCaptcha\ReCaptcha;
-use Elbo\{Library\Controller, Models\User, Models\RememberToken, Library\Email};
 use Symfony\Component\HttpFoundation\{Request, Response, RedirectResponse, Cookie};
+use Elbo\{Library\Controller, Models\User, Models\RememberToken, Library\EmailValidator};
 
 class RegisterHandlerController extends Controller {
 	use \Elbo\Middlewares\Session;
@@ -49,9 +49,11 @@ class RegisterHandlerController extends Controller {
 		}
 
 		try {
-			$normalized_email = Email::normalize($email);
+			$emailvalidator = $this->container->get(EmailValidator::class);
 
-			if (strlen($email) > 100 || !Email::isAllowed($email)) {
+			$normalized_email = $emailvalidator->normalize($email);
+
+			if (!$emailvalidator->isAllowed($email)) {
 				$errors['email'] = 1;
 			}
 			else if (User::where('normalized_email', $normalized_email)->count() !== 0) {

@@ -48,7 +48,7 @@ class UpdatePoliciesCommand extends Command {
 	const extract_domain_regex = '~^(?:https?://)?([^/]+)/.*$~i';
 
 	protected function configure() {
-		$this->setName('update-policy')
+		$this->setName('update:policies')
 		     ->setDescription('Update domain policies from publicly available blacklists')
 		     ->setHelp('Update domain policies from publicly available blacklists');
 	}
@@ -112,7 +112,7 @@ class UpdatePoliciesCommand extends Command {
 		$client = new Client();
 		$domains = [];
 
-		$output->writeln("Starting policy update (".strftime("%Y-%m-%d %H:%M:%S").")");
+		$output->writeln('Starting policy update ('.strftime('%Y-%m-%d %H:%M:%S').')');
 
 		foreach (self::domain_lists as $k => $v) {
 			foreach ($v as $v1) {
@@ -135,13 +135,13 @@ class UpdatePoliciesCommand extends Command {
 			}
 		}
 
-		$output->writeln("Beginning transaction...");
+		$output->writeln('Beginning transaction...');
 
 		DB::transaction(function() use ($output, $domains) {
-			$output->writeln("Removing previous automatic rules...");
+			$output->writeln('Removing previous automatic rules...');
 			DomainPolicy::where('automated', true)->delete();
 
-			$output->writeln("Adding new rules...");
+			$output->writeln('Adding new rules...');
 			foreach ($domains as $domain => $info) {
 				$count = DomainPolicy::where('domain', $domain)->count();
 
@@ -155,7 +155,7 @@ class UpdatePoliciesCommand extends Command {
 				}
 			}
 
-			$output->writeln("Policies updated.");
+			$output->writeln('Policies updated.');
 		});
 	}
 }

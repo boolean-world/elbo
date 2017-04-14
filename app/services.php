@@ -40,6 +40,8 @@ return (function() {
 
 		Elbo\Library\URLShortener::class => DI\object(Elbo\Library\URLShortener::class),
 
+		Elbo\Library\EmailValidator::class => DI\object(Elbo\Library\EmailValidator::class),
+
 		Symfony\Component\Filesystem\Filesystem::class => DI\object(Symfony\Component\Filesystem\Filesystem::class),
 
 		BaconQrCode\Writer::class => DI\object(BaconQrCode\Writer::class),

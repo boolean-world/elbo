@@ -23,14 +23,6 @@ class MigrationsInstallCommand extends Command {
 
 		$config = new Configuration();
 
-		if ($config->get('database.driver') === 'sqlite') {
-			$database = $config->get('database.database', 'data/db.sqlite');
-
-			if (!file_exists($database) && !@touch($database)) {
-				throw new \RuntimeException("Failed to create database at $database");
-			}
-		}
-
 		$output->writeln("Installing migrations...");
 
 		foreach ($migration_files as $migration_file) {

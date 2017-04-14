@@ -3,7 +3,7 @@
 namespace Elbo\Controllers;
 
 use Symfony\Component\HttpFoundation\{Request, Response};
-use Elbo\{Library\Controller, Models\User, Library\Email};
+use Elbo\{Library\Controller, Models\User, Library\EmailValidator};
 
 class AccountController extends Controller {
 	use \Elbo\Middlewares\Session;
@@ -31,9 +31,11 @@ class AccountController extends Controller {
 			$email = $request->request->get('email');
 
 			try {
-				$normalized_email = Email::normalize($email);
+				$emailvalidator = $this->container->get(EmailValidator::class);
 
-				if (strlen($email) > 100 || !Email::isAllowed($email)) {
+				$normalized_email = $emailvalidator->normalize($email);
+
+				if (!$emailvalidator->isAllowed($email)) {
 					$errors['email'] = 1;
 				}
 				else if (User::where('normalized_email', $normalized_email)->where('id', '<>', $userid)->count() !== 0) {
