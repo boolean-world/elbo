@@ -24,11 +24,11 @@ class DomainPolicy extends Model {
 	public static function getDomainComponents(string $domain) {
 		yield $domain;
 
-		$max = strrpos($domain, '.') - 1;
-
-		for ($i = strpos($domain, '.'); $i <= $max; $i++) {
-			if ($domain[$i] === '.') {
-				yield substr($domain, $i + 1);
+		if (($max = strrpos($domain, '.')) !== false) {
+			for ($i = strpos($domain, '.'); $i < $max - 1; $i++) {
+				if ($domain[$i] === '.') {
+					yield substr($domain, $i + 1);
+				}
 			}
 		}
 	}
