@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class RememberToken extends Model {
 	protected $table = 'remember_token';
+	protected $primaryKey = 'authenticator';
+
 	public $timestamps = false;
 	public $incrementing = false;
 

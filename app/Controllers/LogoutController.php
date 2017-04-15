@@ -2,7 +2,7 @@
 
 namespace Elbo\Controllers;
 
-use Elbo\{Library\Controller, Models\User};
+use Elbo\{Library\Controller, Models\User, Models\RememberToken};
 use Symfony\Component\HttpFoundation\{Request, Response, RedirectResponse};
 
 class LogoutController extends Controller {
@@ -24,7 +24,12 @@ class LogoutController extends Controller {
 		$this->session->destroy();
 
 		$response = new RedirectResponse('/');
-		$response->headers->clearCookie('remembertoken');
+		$token = $request->cookies->get('remembertoken');
+
+		if ($token !== null) {
+			RememberToken::where('authenticator', hash('sha256', $token))->delete();
+			$response->headers->clearCookie('remembertoken');
+		}
 
 		return $response;
 	}
