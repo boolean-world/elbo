@@ -12,6 +12,7 @@ class UpdatePoliciesCommand extends Command {
 		DomainPolicy::POLICY_BLOCKED_MALWARE => [
 			'https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt',
 			'http://mirror2.malwaredomains.com/files/justdomains',
+			'http://mirror2.malwaredomains.com/files/immortal_domains.txt',
 			'https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt',
 			'http://www.networksec.org/grabbho/block.txt'
 		],
@@ -31,15 +32,11 @@ class UpdatePoliciesCommand extends Command {
 	];
 
 	const hosts_files = [
-		DomainPolicy::POLICY_BLOCKED_PHISHING => [
-			'https://hosts-file.net/psh.txt'
-		],
 		DomainPolicy::POLICY_BLOCKED_SPAM => [
-			'https://hosts-file.net/fsa.txt',
 			'https://hosts-file.net/pha.txt'
 		],
 		DomainPolicy::POLICY_BLOCKED_MALWARE => [
-			'https://hosts-file.net/emd.txt',
+			'https://www.malwaredomainlist.com/hostslist/hosts.txt',
 			'https://hosts-file.net/pup.txt'
 		]
 	];
