@@ -86,6 +86,10 @@ return (function() {
 				return $config->get($key);
 			}));
 
+			$twig->addFunction(new Twig_SimpleFunction('current_year', function() {
+				return date('Y');
+			}));
+
 			$twig->addFunction(new Twig_SimpleFunction('url', function($path, $arr) {
 				$rv = $path;
 				$begin_query_str = false;

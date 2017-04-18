@@ -12,7 +12,7 @@
   <div class="row">
     <div class="col-sm-10">
       Created on: {{ urlinfo.created_at | date("l, d F Y") }}<br>
-      Redirects to <a href="{{ urlinfo.url }}">http://google.com/</a>
+      Redirects to <a href="{{ urlinfo.url }}">{{ urlinfo.url }}</a>
     </div>
     <div class="col-sm-2 analytics-details">
       Total clicks: 
