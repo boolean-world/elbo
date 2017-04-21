@@ -14,7 +14,9 @@ class UpdatePoliciesCommand extends Command {
 			'http://mirror2.malwaredomains.com/files/justdomains',
 			'http://mirror2.malwaredomains.com/files/immortal_domains.txt',
 			'https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt',
-			'http://www.networksec.org/grabbho/block.txt'
+			'http://www.networksec.org/grabbho/block.txt',
+			'https://www.threatcrowd.org/feeds/domains.txt',
+			'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist'
 		],
 		DomainPolicy::POLICY_BLOCKED_REDIRECTOR => [
 			'https://raw.githubusercontent.com/boolean-world/elbo/master/misc/blacklists/redirectors.txt'
@@ -41,6 +43,15 @@ class UpdatePoliciesCommand extends Command {
 		]
 	];
 
+	const ip_lists = [
+		DomainPolicy::POLICY_BLOCKED_MALWARE => [
+			'http://rules.emergingthreats.net/blockrules/compromised-ips.txt',
+			'https://zeustracker.abuse.ch/blocklist.php?download=badips',
+			'https://ransomwaretracker.abuse.ch/downloads/RW_IPBL.txt',
+			'https://www.threatcrowd.org/feeds/ips.txt'
+		]
+	];
+
 	const domain_regex = '/^(?:[a-z0-9][a-z0-9-]*[a-z0-9]?\.)+(?:[a-z]{2,}(?:[a-z0-9-]*[a-z0-9])?)$/i';
 	const extract_domain_regex = '~^(?:https?://)?([^/]+)/.*$~i';
 
@@ -57,7 +68,7 @@ class UpdatePoliciesCommand extends Command {
 			if (preg_match(self::domain_regex, $line)) {
 				# Exclude test domains.
 				if (!preg_match('/\.disconnect\.me$/', $line)) {
-					$rule = strtolower($line);
+					$rule = preg_replace('/^www\.(.{4,}\..{2,})/', '\1', strtolower($line));
 					$array[$rule] = [
 						'policy' => $value,
 						'comment' => $comment
@@ -77,8 +88,7 @@ class UpdatePoliciesCommand extends Command {
 			$line = preg_replace('/^\s*[0-9:.]+\s*|\s*#.*$/', '', $line);
 
 			if (preg_match(self::domain_regex, $line)) {
-				# Try reducing the rule.
-				$rule = strtolower(preg_replace('/^www\.(.{4,}\..{2,})/', '\1', $line));
+				$rule = preg_replace('/^www\.(.{4,}\..{2,})/', '\1', strtolower($line));
 				$array[$rule] = [
 					'policy' => $value,
 					'comment' => $comment
@@ -95,7 +105,24 @@ class UpdatePoliciesCommand extends Command {
 		while ($line !== false) {
 			if (preg_match(self::extract_domain_regex, $line, $matches)) {
 				$rule = strtolower(preg_replace('/\:[0-9]+$/', '', $matches[1]));
+				$rule = preg_replace('/^www\.(.{4,}\..{2,})/', '\1', $rule);
+
 				$array[$rule] = [
+					'policy' => $value,
+					'comment' => $comment
+				];
+			}
+
+			$line = strtok("\r\n");
+		}
+	}
+
+	protected function processIPList(string $text, array &$array, int $value, string $comment) {
+		$line = strtok($text, "\r\n");
+
+		while ($line !== false) {
+			if (filter_var($line, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
+				$array[$line] = [
 					'policy' => $value,
 					'comment' => $comment
 				];
@@ -129,6 +156,13 @@ class UpdatePoliciesCommand extends Command {
 			foreach ($v as $v1) {
 				$output->writeln("Downloading and processing $v1...");
 				$this->processURLList($client->get($v1)->getBody(), $domains, $k, $v1);
+			}
+		}
+
+		foreach (self::ip_lists as $k => $v) {
+			foreach ($v as $v1) {
+				$output->writeln("Downloading and processing $v1...");
+				$this->processIPList($client->get($v1)->getBody(), $domains, $k, $v1);
 			}
 		}
 

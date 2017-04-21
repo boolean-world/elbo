@@ -39,7 +39,8 @@ class NewPolicyHandlerController extends Controller {
 		if (filter_var($domain, FILTER_VALIDATE_IP) === false) {
 			$domain = idn_to_ascii(strtolower($domain), 0, INTL_IDNA_VARIANT_UTS46);
 
-			if (!preg_match('/^(?:[a-z0-9][a-z0-9-]*[a-z0-9]?\.)+[a-z]{2,}$/', $domain)) {
+			if (!preg_match('/^(?:[a-z0-9][a-z0-9-]*[a-z0-9]?\.)+[a-z]{2,}$/', $domain) ||
+				(filter_var($domain, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false)) {
 				return new Response($twig->render('admin/edit_policy.html.twig', $context + [
 					'entry' => compact('domain', 'policy', 'automated', 'comment'),
 					'error' => 1
