@@ -2,7 +2,7 @@
 
 namespace Elbo\Middlewares;
 
-use Elbo\Models\RememberToken;
+use Elbo\Models\{User, RememberToken};
 use Symfony\Component\HttpFoundation\Request;
 
 trait PersistLogin {
@@ -47,6 +47,11 @@ trait PersistLogin {
 		}
 
 		$this->session->set('userid', $tokeninfo->userid);
+
+		User::where('id', $tokeninfo->userid)->update([
+			'last_login' => time(),
+			'last_login_ip' => $request->getClientIp()
+		]);
 
 		return $this->next();
 	}

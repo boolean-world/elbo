@@ -75,7 +75,7 @@
         </td>
         <td class="custom-col">{% if entry.custom %} Yes {% else %} No {% endif %}</td>
         <td class="created-col">
-          {{ entry.created_at | date("Y-m-d h:m:s") }}<br>
+          {{ entry.created_at | date("Y-m-d h:i:s") }}<br>
           {{ entry.ip }}
           {{ entry.email }}
         </td>

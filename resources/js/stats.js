@@ -144,7 +144,7 @@ google.charts.setOnLoadCallback(function() {
 			"class": "chart platform-chart"
 		});
 
-		elem.append($("<h1/>").text("Clicks over time"))
+		elem.append($("<h3/>").text("Clicks over time"))
 		    .append($("<hr/>"))
 		    .append(clicks_chart);
 
@@ -158,25 +158,25 @@ google.charts.setOnLoadCallback(function() {
 
 		first_row.append($("<div/>", {
 			"class": "col-sm-6"
-		}).append($("<h1/>").text("Country statistics"))
+		}).append($("<h3/>").text("Country statistics"))
 		  .append($("<hr/>"))
 		  .append(country_chart));
 
 		first_row.append($("<div/>", {
 			"class": "col-sm-6"
-		}).append($("<h1/>").text("Referer statistics"))
+		}).append($("<h3/>").text("Referer statistics"))
 		  .append($("<hr/>"))
 		  .append(referer_chart));
 
 		second_row.append($("<div/>", {
 			"class": "col-sm-6"
-		}).append($("<h1/>").text("Browser statistics"))
+		}).append($("<h3/>").text("Browser statistics"))
 		  .append($("<hr/>"))
 		  .append(browser_chart));
 
 		second_row.append($("<div/>", {
 			"class": "col-sm-6"
-		}).append($("<h1/>").text("Platform statistics"))
+		}).append($("<h3/>").text("Platform statistics"))
 		  .append($("<hr/>"))
 		  .append(platform_chart));
 

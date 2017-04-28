@@ -56,12 +56,12 @@
       <tr {% if entry.disabled %}class="bg-danger"{% endif %}>
         <td class="email-col">{{ entry.email }}</td>
         <td class="created-col">
-          {{ entry.created_at | date("Y-m-d h:m:s") }}
+          {{ entry.created_at | date("Y-m-d h:i:s") }}
           <br>
           {{ entry.created_from }}
         </td>
         <td class="login-col">
-          {{ entry.last_login | date("Y-m-d h:m:s") }}
+          {{ entry.last_login | date("Y-m-d h:i:s") }}
           <br>
           {{ entry.last_login_ip }}
         </td>
