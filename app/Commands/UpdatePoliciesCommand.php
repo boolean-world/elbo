@@ -61,7 +61,7 @@ class UpdatePoliciesCommand extends Command {
 		     ->setHelp('Update domain policies from publicly available blacklists');
 	}
 
-	protected function processDomainList(string $text, array &$array, int $value, string $comment) {
+	protected function processDomainList(string $text, array &$array, int $value) {
 		$line = strtok($text, "\r\n");
 
 		while ($line !== false) {
@@ -69,11 +69,7 @@ class UpdatePoliciesCommand extends Command {
 				# Exclude test domains.
 				if (!preg_match('/\.disconnect\.me$/', $line)) {
 					$rule = preg_replace('/^www\.(.{4,}\..{2,})/', '\1', strtolower($line));
-					$array[$rule] = [
-						'policy' => $value,
-						'comment' => $comment
-					];
-
+					$array[$rule] = $value;
 				}
 			}
 
@@ -81,7 +77,7 @@ class UpdatePoliciesCommand extends Command {
 		}
 	}
 
-	protected function processHostsFile(string $text, array &$array, int $value, string $comment) {
+	protected function processHostsFile(string $text, array &$array, int $value) {
 		$line = strtok($text, "\r\n");
 
 		while ($line !== false) {
@@ -89,17 +85,14 @@ class UpdatePoliciesCommand extends Command {
 
 			if (preg_match(self::domain_regex, $line)) {
 				$rule = preg_replace('/^www\.(.{4,}\..{2,})/', '\1', strtolower($line));
-				$array[$rule] = [
-					'policy' => $value,
-					'comment' => $comment
-				];
+				$array[$rule] = $value;
 			}
 
 			$line = strtok("\r\n");
 		}
 	}
 
-	protected function processURLList(string $text, array &$array, int $value, string $comment) {
+	protected function processURLList(string $text, array &$array, int $value) {
 		$line = strtok($text, "\r\n");
 
 		while ($line !== false) {
@@ -107,25 +100,19 @@ class UpdatePoliciesCommand extends Command {
 				$rule = strtolower(preg_replace('/\:[0-9]+$/', '', $matches[1]));
 				$rule = preg_replace('/^www\.(.{4,}\..{2,})/', '\1', $rule);
 
-				$array[$rule] = [
-					'policy' => $value,
-					'comment' => $comment
-				];
+				$array[$rule] = $value;
 			}
 
 			$line = strtok("\r\n");
 		}
 	}
 
-	protected function processIPList(string $text, array &$array, int $value, string $comment) {
+	protected function processIPList(string $text, array &$array, int $value) {
 		$line = strtok($text, "\r\n");
 
 		while ($line !== false) {
 			if (filter_var($line, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
-				$array[$line] = [
-					'policy' => $value,
-					'comment' => $comment
-				];
+				$array[$line] = $value;
 			}
 
 			$line = strtok("\r\n");
@@ -173,15 +160,14 @@ class UpdatePoliciesCommand extends Command {
 			DomainPolicy::where('automated', true)->delete();
 
 			$output->writeln('Adding new rules...');
-			foreach ($domains as $domain => $info) {
+			foreach ($domains as $domain => $policy) {
 				$count = DomainPolicy::where('domain', $domain)->count();
 
 				if ($count === 0) {
 					DomainPolicy::create([
 						'domain' => $domain,
 						'automated' => true,
-						'policy' => $info['policy'],
-						'comment' => $info['comment']
+						'policy' => $policy
 					]);
 				}
 			}
