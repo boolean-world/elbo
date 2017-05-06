@@ -53,7 +53,7 @@ class AnalyticsDataController extends Controller {
 				$year[$i] = (int)date('Y', $now - $i * 86400);
 
 				$click_stats += [
-					date("d M Y", $now - $i * 86400) => Stats::where('shorturl', $data['shorturl'])
+					date("d M Y", $now - $i * 86400) => (int)Stats::where('shorturl', $data['shorturl'])
 					                                         ->where('date', $date[$i])
 					                                         ->where('month', $month[$i])
 					                                         ->where('year', $year[$i])
@@ -108,7 +108,7 @@ class AnalyticsDataController extends Controller {
 				$year[$i] = (int)date('Y', $now - $i * 86400);
 
 				$click_stats += [
-					date("d M Y", $now - $i * 86400) => Stats::where('shorturl', $data['shorturl'])
+					date("d M Y", $now - $i * 86400) => (int)Stats::where('shorturl', $data['shorturl'])
 					                                         ->where('date', $date[$i])
 					                                         ->where('month', $month[$i])
 					                                         ->where('year', $year[$i])
@@ -162,7 +162,7 @@ class AnalyticsDataController extends Controller {
 				$year[$i] = (int)date('Y', strtotime("-${i} month", $now));
 
 				$click_stats += [
-					date("M Y",  strtotime("-${i} month", $now)) => Stats::where('shorturl', $data['shorturl'])
+					date("M Y",  strtotime("-${i} month", $now)) => (int)Stats::where('shorturl', $data['shorturl'])
 					                                                     ->where('month', $month[$i])
 					                                                     ->where('year', $year[$i])
 					                                                     ->sum('count')
