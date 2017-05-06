@@ -72,7 +72,13 @@ class LoginHandlerController extends Controller {
 		$user->last_login_ip = $request->getClientIp();
 		$user->save();
 
-		$response = new RedirectResponse('/');
+		$redir = $request->query->get('redirect') ?? '/';
+
+		if ($redir[0] !== '/') {
+			$redir = '/';
+		}
+
+		$response = new RedirectResponse($redir);
 
 		if ($request->request->get('remember_me')) {
 			$response->headers->setCookie(new Cookie('remembertoken', RememberToken::createFor($user->id), $time + 2592000));

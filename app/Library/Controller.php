@@ -11,17 +11,18 @@ abstract class Controller {
 	protected $container;
 	protected $middlewares = [];
 
-	private $currentMiddlewareIndex;
-	private $runInvoked;
+	private $currentMiddlewareIndex = 0;
+	private $runInvoked = false;
 
 	public final function __construct(Request $request, array $data, ContainerInterface $container) {
 		$this->request = $request;
 		$this->data = $data;
 		$this->container = $container;
 
-		$this->currentMiddlewareIndex = 0;
-		$this->runInvoked = false;
+		$this->initialize();
 	}
+
+	protected function initialize() {}
 
 	abstract public function run(Request $request, array &$data);
 

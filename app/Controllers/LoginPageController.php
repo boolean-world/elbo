@@ -21,7 +21,8 @@ class LoginPageController extends Controller {
 		$ratelimiter = $this->container->get(LoginRateLimiter::class);
 
 		return new Response($twig->render('auth/login.html.twig', [
-			'show_captcha' => !$ratelimiter->isAllowed($request->getClientIp())
+			'show_captcha' => !$ratelimiter->isAllowed($request->getClientIp()),
+			'redirect_url' => $request->query->get('redirect')
 		]));
 	}
 }

@@ -11,7 +11,10 @@
       <div class="panel panel-default">
         <div class="panel-heading">Sign Up</div>
         <div class="panel-body">
-          <form class="form-horizontal" method="POST" action="/~signup">
+          <form class="form-horizontal" method="POST" action="{{ url('/~signup', {
+            redirect: redirect_url
+          }) }}">
+
             <div class="form-group {% if errors.email is not null %}has-error{% endif %}">
               <label for="email" class="col-md-4 control-label">E-Mail Address</label>
 
@@ -100,7 +103,9 @@
             <div class="row">
               <div class="col-md-4"></div>
               <div class="col-md-6">
-                Already have an account? <a href="/~login">Login</a>.
+                Already have an account? <a href="{{ url('/~login', {
+                  redirect: redirect_url
+                }) }}">Login</a>.
               </div>
             </div>
 

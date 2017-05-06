@@ -98,7 +98,13 @@ class RegisterHandlerController extends Controller {
 
 		$this->session->set('userid', $user->id);
 
-		$response = new RedirectResponse('/');
+		$redir = $request->query->get('redirect') ?? '/';
+
+		if ($redir[0] !== '/') {
+			$redir = '/';
+		}
+
+		$response = new RedirectResponse($redir);
 		$response->headers->setCookie(new Cookie('remembertoken', RememberToken::createFor($user->id), $time + 2592000));
 
 		return $response;

@@ -19,6 +19,8 @@ class RegisterPageController extends Controller {
 	public function run(Request $request, array &$data) {
 		$twig = $this->container->get(\Twig_Environment::class);
 
-		return new Response($twig->render('auth/register.html.twig'));
+		return new Response($twig->render('auth/register.html.twig', [
+			'redirect_url' => $request->query->get('redirect')
+		]));
 	}
 }

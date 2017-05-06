@@ -22,6 +22,10 @@ class AnalyticsController extends Controller {
 
 	protected $warningPage = 'stats_unavailable.html.twig';
 
+	protected function initialize() {
+		$this->redirectUrl = '/~login?redirect='.urlencode('/~analytics/'.$this->data['shorturl']);
+	}
+
 	public function run(Request $request, array &$data) {
 		$twig = $this->container->get(\Twig_Environment::class);
 
