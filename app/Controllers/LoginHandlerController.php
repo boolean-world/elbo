@@ -72,9 +72,9 @@ class LoginHandlerController extends Controller {
 		$user->last_login_ip = $request->getClientIp();
 		$user->save();
 
-		$redir = $request->query->get('redirect') ?? '/';
+		$redir = $request->query->get('redirect');
 
-		if ($redir[0] !== '/') {
+		if ($redir == null || $redir[0] !== '/') {
 			$redir = '/';
 		}
 

@@ -98,9 +98,9 @@ class RegisterHandlerController extends Controller {
 
 		$this->session->set('userid', $user->id);
 
-		$redir = $request->query->get('redirect') ?? '/';
+		$redir = $request->query->get('redirect');
 
-		if ($redir[0] !== '/') {
+		if ($redir == null || $redir[0] !== '/') {
 			$redir = '/';
 		}
 
