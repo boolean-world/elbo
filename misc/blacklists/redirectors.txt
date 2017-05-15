@@ -22,6 +22,7 @@ anon.to
 anonymizer.info
 arky.in
 atu.ca
+aww.su
 back.ly
 bam.bz
 bc.vc
@@ -128,6 +129,7 @@ ri.ms
 s007.co
 s2r.co
 safe.mn
+shink.in
 shittyurl.org
 shorl.com
 shortener.us
