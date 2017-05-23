@@ -91,20 +91,26 @@ div.footer, div.push-to-bottom {
 }
 
 @media (min-width: 773px) {
-  .analytics-details .click-count {
+  .analytics-details .click-count,
+  .analytics-details-alt .click-count {
     font-size: 30px;
     line-height: 1em;
     display: block;
   }
 
-  .analytics-details .click-word {
+  .analytics-details .click-word,
+  .analytics-details-alt .click-word {
     display: block;
   }
 
-  .analytics-details {
+  .analytics-details,
+  .analytics-details-alt {
     text-align: right;
-    border-left: 1px solid #f0f0f0;
     min-height: 120px;
+  }
+
+  .analytics-details {
+    border-left: 1px solid #f0f0f0;
   }
 }
 
