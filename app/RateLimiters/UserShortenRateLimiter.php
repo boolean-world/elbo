@@ -2,5 +2,6 @@
 
 namespace Elbo\RateLimiters;
 
-class UserShortenRateLimiter extends IPRateLimiter {}
+use Elbo\Library\RateLimiter;
 
+class UserShortenRateLimiter extends RateLimiter {}

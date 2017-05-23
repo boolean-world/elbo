@@ -32,7 +32,7 @@ trait ShortenRateLimited {
 			}
 		}
 
-		$ratelimiter->increment($ip);
+		$ratelimiter->increment($identifier);
 
 		return $this->next();
 	}
