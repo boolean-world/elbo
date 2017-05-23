@@ -2,28 +2,51 @@
 
 namespace Elbo\Library;
 
+use Elbo\Library\Configuration;
+
 abstract class RateLimiter {
 	protected $redis;
-	protected $requests = 5;
-	protected $timeframe = 1;
-	protected $prefix;
+	protected $requests;
+	protected $timeframe;
+	protected $redis_key_prefix;
 
-	public function __construct(\Redis $redis) {
+	public function __construct(Configuration $config, \Redis $redis) {
 		$this->redis = $redis;
+		$prefix = $this->getPrefix(get_called_class());
+		$this->redis_key_prefix = "elbo:rl:$prefix:";
+		$this->requests = $config->get("ratelimiter.$prefix.requests", 5);
+		$this->timeframe = $config->get("ratelimiter.$prefix.timeframe", 1);
+	}
 
-		$classname = get_called_class();
-		$pos = strrpos($classname, '\\');
+	private function getPrefix(string $classname) {
+		$basename = class_basename($classname);
+		$pos = strrpos($basename, 'RateLimiter');
 
-		if ($pos === false) {
-			$this->prefix = 'elbo:rl:'.$classname.':';
+		if ($pos !== false && $pos !== 0) {
+			$basename = substr($basename, 0, $pos);
 		}
-		else {
-			$this->prefix = 'elbo:rl:'.substr($classname, $pos + 1).':';
+
+		$len = strlen($basename);
+		$i = 0;
+		$rv = '';
+
+		while ($i < $len) {
+			if ($i !== $len - 1 && ctype_lower($basename[$i]) && ctype_upper($basename[$i + 1])) {
+				$rv .= $basename[$i].'_'.strtolower($basename[$i + 1]);
+				$i++;
+			}
+			else {
+				$rv .= strtolower($basename[$i]);
+			}
+
+			$i++;
 		}
+
+		return $rv;
 	}
 
 	protected function getKey(string $identifier) {
-		return $this->prefix.$identifier;
+		return $this->redis_key_prefix.$identifier;
 	}
 
 	public function increment(string $identifier) {

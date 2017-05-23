@@ -13,10 +13,10 @@ abstract class IPRateLimiter extends RateLimiter {
 		}
 
 		if (strlen($key) === 8) { // IPv4
-			return $this->prefix.':4_'.$key;
+			return "{$this->redis_key_prefix}4_$key";
 		}
-		else { // IPv6
-			return $this->prefix.':6_'.substr($key, 0, 20); // /80 subnet
+		else { // IPv6 /80 subnet
+			return "{$this->redis_key_prefix}6_".substr($key, 0, 20);
 		}
 	}
 }

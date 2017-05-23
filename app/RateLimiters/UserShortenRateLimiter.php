@@ -2,7 +2,5 @@
 
 namespace Elbo\RateLimiters;
 
-class UserShortenRateLimiter extends IPRateLimiter {
-	protected $requests = 20;
-	protected $timeframe = 30;
-}
+class UserShortenRateLimiter extends IPRateLimiter {}
+
