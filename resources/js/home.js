@@ -65,7 +65,7 @@ function loadHistory() {
 	}).done(function(data) {
 		var len = data.result.length;
 
-		for (var i = len - 1; i >= 0; i--) {
+		for (var i = 0; i < len; i++) {
 			addCard(data.result[i]);
 		}
 
@@ -254,7 +254,7 @@ function addCard(data) {
 	panel.append(panelbody)
 	     .append(panelfooter);
 
-	list.prepend(panel);
+	list.append(panel);
 
 	$("#shortened-urls-container").removeClass("hidden");
 }
@@ -378,7 +378,7 @@ if (list.attr("data-history-time")) {
 		if ((scrollTop + window.innerHeight) >= scrollHeight) {
 			loadHistory();
 		};
-	}, 500);
+	}, 800);
 
 	loadHistory();
 }
