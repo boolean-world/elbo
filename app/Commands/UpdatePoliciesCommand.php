@@ -15,7 +15,6 @@ class UpdatePoliciesCommand extends Command {
 			'http://mirror2.malwaredomains.com/files/immortal_domains.txt',
 			'https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt',
 			'http://www.networksec.org/grabbho/block.txt',
-			'https://www.threatcrowd.org/feeds/domains.txt',
 			'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist'
 		],
 		DomainPolicy::POLICY_BLOCKED_REDIRECTOR => [
@@ -47,8 +46,7 @@ class UpdatePoliciesCommand extends Command {
 		DomainPolicy::POLICY_BLOCKED_MALWARE => [
 			'http://rules.emergingthreats.net/blockrules/compromised-ips.txt',
 			'https://zeustracker.abuse.ch/blocklist.php?download=badips',
-			'https://ransomwaretracker.abuse.ch/downloads/RW_IPBL.txt',
-			'https://www.threatcrowd.org/feeds/ips.txt'
+			'https://ransomwaretracker.abuse.ch/downloads/RW_IPBL.txt'
 		]
 	];
 
