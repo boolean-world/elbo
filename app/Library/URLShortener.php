@@ -2,9 +2,9 @@
 
 namespace Elbo\Library;
 
+use GuzzleHttp\{Client, TransferStats};
 use Elbo\Models\{ShortURL, DomainPolicy, ShortenHistory};
 use Elbo\Exceptions\{URLShortenerException, InvalidURLException};
-use GuzzleHttp\{Client, TransferStats, Exception\GuzzleException};
 
 class URLShortener {
 	private $client;
@@ -145,8 +145,11 @@ class URLShortener {
 				}
 			}
 		}
-		catch (GuzzleException $ge) {
+		catch (\RuntimeException $re) {
 			# We couldn't get the contents of the URL; nothing requires to be done.
+			# Guzzle usually throws a GuzzleHttp\Exception\TransferException or one
+			# of its derived exceptions, but in some rare cases a RuntimeException
+			# can also be thrown.
 		}
 
 		if (!$custom) {
