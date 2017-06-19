@@ -66,7 +66,7 @@ function loadHistory() {
 		var len = data.result.length;
 
 		for (var i = 0; i < len; i++) {
-			addCard(data.result[i]);
+			addCard(data.result[i], false);
 		}
 
 		if (len < 15) {
@@ -98,7 +98,7 @@ function loadHistory() {
 	});
 }
 
-function addCard(data) {
+function addCard(data, ontop) {
 	var shorturl = window.location.protocol + "//" + window.location.host + "/" + data.shorturl;
 	var enc_url = encodeURIComponent(shorturl);
 
@@ -254,7 +254,12 @@ function addCard(data) {
 	panel.append(panelbody)
 	     .append(panelfooter);
 
-	list.append(panel);
+	if (ontop) {
+		list.prepend(panel);
+	}
+	else {
+		list.append(panel);
+	}
 
 	$("#shortened-urls-container").removeClass("hidden");
 }
@@ -297,7 +302,7 @@ function shortenLink() {
 			}
 
 			$('#promo-image').remove();
-			addCard(data);
+			addCard(data, true);
 
 			if (!list.attr("data-history-time")) {
 				var offset = $("#main-promo-text").offset().top;
@@ -392,7 +397,7 @@ else {
 		$('#promo-image').remove();
 
 		for (var i = 0; i < len; i++) {
-			addCard(shorturl_data[i]);
+			addCard(shorturl_data[i], true);
 		}
 	}
 }
