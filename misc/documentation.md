@@ -25,7 +25,7 @@ The following instructions discuss installation on Debian (and Debian derived sy
 * Run the following commands to install the core dependencies:
 
 		sudo apt update
-		sudo apt install git redis-server php-curl php-fpm php-gmp php-cli php-mbstring php-intl nginx nodejs npm
+		sudo apt install git redis-server php-curl php-gd php-fpm php-gmp php-cli php-mbstring php-intl nginx nodejs npm
 		which node || sudo ln -s /usr/bin/nodejs /usr/bin/node
 
 * Install composer:
@@ -47,11 +47,11 @@ The following instructions discuss installation on Debian (and Debian derived sy
 		composer install
 		npm install
 
+* Copy `data/config/elbo.sample.yml` to `data/config/elbo.yml` and change the required values. Most importantly, `environment.phase` should be set to `production` and the values in the `api_key` section should be set.
+
 * Install the MaxMind GeoLite2 Country database.
 
 		./bin/elbo-cli update:geoip
-
-* Copy `data/config/elbo.sample.yml` to `data/config/elbo.yml` and change the required values. Most importantly, `environment.phase` should be set to `production` and the values in the `api_key` section should be set.
 
 * Create the database tables:
 
