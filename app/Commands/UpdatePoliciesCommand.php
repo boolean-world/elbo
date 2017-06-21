@@ -11,8 +11,8 @@ class UpdatePoliciesCommand extends Command {
 	const domain_lists = [
 		DomainPolicy::POLICY_BLOCKED_MALWARE => [
 			'https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt',
-			'http://mirror2.malwaredomains.com/files/justdomains',
-			'http://mirror2.malwaredomains.com/files/immortal_domains.txt',
+			'http://mirror1.malwaredomains.com/files/justdomains',
+			'http://mirror1.malwaredomains.com/files/immortal_domains.txt',
 			'https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt',
 			'http://www.networksec.org/grabbho/block.txt',
 			'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist'
