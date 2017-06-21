@@ -1,0 +1,70 @@
+{% extends('layouts/admin.html.twig') %}
+
+{% block content %}
+<div class="container">
+  <h2>Edit policy</h2>
+
+  {% if error is not null %}
+  <div class="alert alert-danger">
+    {% if error == 1 %}
+      The given domain name is not valid.
+    {% elseif error == 2 %}
+      An invalid policy value was given.
+    {% elseif error == 3 %}
+      A policy exists for the given domain.
+    {% endif %}
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  </div>
+  {% endif %}
+
+  <form class="form-horizontal" method="POST" action="{{ url ('', {
+    r_domain: r_domain,
+    r_automated: r_automated,
+    r_policy: r_policy,
+    r_comment: r_comment,
+    r_n: r_n
+  }) }}">
+    <div class="form-group">
+      <label class="control-label col-sm-2">Domain/IP</label>
+      <div class="col-sm-10">
+        <input name="domain" type="text" class="form-control" value="{{ entry.domain }}"
+        {% if disable_domain_editing %} disabled {% endif %}>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2">Policy</label>
+      <div class="col-sm-10">
+        <select name="policy" class="form-control">
+          <option value="0" {% if entry.policy == 0 %} selected {% endif %}>Allowed</option>
+          <option value="1" {% if entry.policy == 1 %} selected {% endif %}>Blocked (Spam)</option>
+          <option value="2" {% if entry.policy == 2 %} selected {% endif %}>Blocked (Malware)</option>
+          <option value="3" {% if entry.policy == 3 %} selected {% endif %}>Blocked (Phishing)</option>
+          <option value="4" {% if entry.policy == 4 %} selected {% endif %}>Blocked (PII)</option>
+          <option value="5" {% if entry.policy == 5 %} selected {% endif %}>Blocked (Child abuse)</option>
+          <option value="6" {% if entry.policy == 6 %} selected {% endif %}>Blocked (Violent crimes)</option>
+          <option value="7" {% if entry.policy == 7 %} selected {% endif %}>Blocked (Redirector)</option>
+        </select>
+      </div>     
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2">Comment</label>
+      <div class="col-sm-10">
+        <input name="comment" type="text" class="form-control" value="{{ entry.comment }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2"></label>
+      <div class="col-sm-10">
+        <input name="automated" type="checkbox" {% if entry.automated %} checked {% endif %}>
+        Automated entry
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-10">
+        <input class="btn btn-success" type="submit" value="Save">
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

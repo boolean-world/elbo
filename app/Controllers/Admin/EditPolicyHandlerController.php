@@ -27,7 +27,6 @@ class EditPolicyHandlerController extends Controller {
 			'r_policy' => $request->query->get('r_policy'),
 			'r_comment' => $request->query->get('r_comment'),
 			'r_n' => $request->query->get('r_n'),
-			'edit_mode' => 2,
 			'login_email' => User::where('id', $this->session->get('userid'))->pluck('email')->first()
 		];
 

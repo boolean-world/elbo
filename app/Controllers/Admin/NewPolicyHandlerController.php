@@ -27,7 +27,6 @@ class NewPolicyHandlerController extends Controller {
 			'r_policy' => $request->query->get('r_policy'),
 			'r_comment' => $request->query->get('r_comment'),
 			'r_n' => $request->query->get('r_n'),
-			'edit_mode' => 1,
 			'login_email' => User::where('id', $this->session->get('userid'))->pluck('email')->first(),
 		];
 
@@ -41,7 +40,7 @@ class NewPolicyHandlerController extends Controller {
 
 			if (!preg_match('/^(?:[a-z0-9][a-z0-9-]*[a-z0-9]?\.)+[a-z]{2,}$/', $domain) ||
 				(filter_var($domain, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false)) {
-				return new Response($twig->render('admin/edit_policy.html.twig', $context + [
+				return new Response($twig->render('admin/add_policy.html.twig', $context + [
 					'entry' => compact('domain', 'policy', 'automated', 'comment'),
 					'error' => 1
 				]));
