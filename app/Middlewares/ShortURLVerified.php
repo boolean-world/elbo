@@ -44,7 +44,8 @@ trait ShortURLVerified {
 			return new Response($twig->render($this->warningPage ?? 'warning.html.twig', [
 				'type' => $policy,
 				'url' => $res->url,
-				'shorturl' => $res->shorturl
+				'shorturl' => $res->shorturl,
+				'login_email' => $email
 			]), 403);
 		}
 
