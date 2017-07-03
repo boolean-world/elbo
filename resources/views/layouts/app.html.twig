@@ -24,6 +24,10 @@
 
     {% block content %}
     {% endblock %}
+
+    {% if login_email %}
+      {% include('layouts/extmodal.twig.html') %}
+    {% endif %}
   </div>
   <div class="push-to-bottom"></div>
 
