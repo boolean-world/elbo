@@ -11,12 +11,14 @@ class RegisterHandlerController extends Controller {
 	use \Elbo\Middlewares\PersistLogin;
 	use \Elbo\Middlewares\CSRFProtected;
 	use \Elbo\Middlewares\RedirectIfLoggedIn;
+	use \Elbo\Middlewares\RedirectParameterVerified;
 
 	protected $middlewares = [
 		'manageSession',
 		'persistLogin',
 		'redirectIfLoggedIn',
-		'csrfProtected'
+		'csrfProtected',
+		'redirectParameterVerified'
 	];
 
 	public function run(Request $request, array &$data) {
@@ -98,13 +100,7 @@ class RegisterHandlerController extends Controller {
 
 		$this->session->set('userid', $user->id);
 
-		$redir = $request->query->get('redirect');
-
-		if ($redir == null || $redir[0] !== '/') {
-			$redir = '/';
-		}
-
-		$response = new RedirectResponse($redir);
+		$response = new RedirectResponse($request->query->get('redirect'));
 		$response->headers->setCookie(new Cookie('remembertoken', RememberToken::createFor($user->id), $time + 2592000));
 
 		return $response;
