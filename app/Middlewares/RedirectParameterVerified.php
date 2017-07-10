@@ -2,7 +2,7 @@
 
 namespace Elbo\Middlewares;
 
-use Symfony\Component\HttpFoundation\{Request, Response};
+use Symfony\Component\HttpFoundation\Request;
 
 trait RedirectParameterVerified {
 	protected function redirectParameterVerified(Request $request) {
