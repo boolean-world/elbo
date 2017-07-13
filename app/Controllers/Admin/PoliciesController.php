@@ -36,7 +36,14 @@ class PoliciesController extends Controller {
 			$query->where('automated', $automated === 1);
 		}
 
-		if ($policy >= 1 && $policy <= 8) {
+		if (in_array($policy - 1, [
+			DomainPolicy::POLICY_ALLOWED,
+			DomainPolicy::POLICY_BLOCKED_SPAM,
+			DomainPolicy::POLICY_BLOCKED_MALWARE,
+			DomainPolicy::POLICY_BLOCKED_PHISHING,
+			DomainPolicy::POLICY_BLOCKED_ILLEGAL_CONTENT,
+			DomainPolicy::POLICY_BLOCKED_REDIRECTOR
+		])) {
 			$query->where('policy', $policy - 1);
 		}
 

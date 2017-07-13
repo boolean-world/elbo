@@ -32,9 +32,7 @@ trait ShortURLVerified {
 		if ($policy !== null && $policy != DomainPolicy::POLICY_ALLOWED) {
 			$twig = $this->container->get(\Twig_Environment::class);
 
-			if ($policy === DomainPolicy::POLICY_BLOCKED_PII ||
-				$policy === DomainPolicy::POLICY_BLOCKED_CHILD_ABUSE ||
-				$policy === DomainPolicy::POLICY_BLOCKED_VIOLENT_CRIME) {
+			if ($policy === DomainPolicy::POLICY_BLOCKED_ILLEGAL_CONTENT) {
 				# Redirect to the generic "disabled" page to prevent giving out the URL.
 				return new Response($twig->render($this->warningPage ?? 'disabled.html.twig', [
 					'login_email' => $email

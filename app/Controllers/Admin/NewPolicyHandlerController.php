@@ -52,12 +52,10 @@ class NewPolicyHandlerController extends Controller {
 			DomainPolicy::POLICY_BLOCKED_SPAM,
 			DomainPolicy::POLICY_BLOCKED_MALWARE,
 			DomainPolicy::POLICY_BLOCKED_PHISHING,
-			DomainPolicy::POLICY_BLOCKED_PII,
-			DomainPolicy::POLICY_BLOCKED_CHILD_ABUSE,
-			DomainPolicy::POLICY_BLOCKED_VIOLENT_CRIME,
+			DomainPolicy::POLICY_BLOCKED_ILLEGAL_CONTENT,
 			DomainPolicy::POLICY_BLOCKED_REDIRECTOR
 		])) {
-			return new Response($twig->render('admin/edit_policy.html.twig', $context + [
+			return new Response($twig->render('admin/add_policy.html.twig', $context + [
 				'entry' => compact('domain', 'policy', 'automated', 'comment'),
 				'error' => 2
 			]));

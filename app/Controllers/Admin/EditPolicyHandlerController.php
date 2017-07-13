@@ -41,15 +41,14 @@ class EditPolicyHandlerController extends Controller {
 		$automated = (bool)($request->request->get('automated'));
 		$comment = trim($request->request->get('comment'));
 
-		if ($policy !== DomainPolicy::POLICY_ALLOWED &&
-			$policy !== DomainPolicy::POLICY_BLOCKED_SPAM &&
-			$policy !== DomainPolicy::POLICY_BLOCKED_MALWARE &&
-			$policy !== DomainPolicy::POLICY_BLOCKED_PHISHING &&
-			$policy !== DomainPolicy::POLICY_BLOCKED_PII &&
-			$policy !== DomainPolicy::POLICY_BLOCKED_CHILD_ABUSE &&
-			$policy !== DomainPolicy::POLICY_BLOCKED_VIOLENT_CRIME &&
-			$policy !== DomainPolicy::POLICY_BLOCKED_REDIRECTOR
-		) {
+		if (!in_array($policy, [
+			DomainPolicy::POLICY_ALLOWED,
+			DomainPolicy::POLICY_BLOCKED_SPAM,
+			DomainPolicy::POLICY_BLOCKED_MALWARE,
+			DomainPolicy::POLICY_BLOCKED_PHISHING,
+			DomainPolicy::POLICY_BLOCKED_ILLEGAL_CONTENT,
+			DomainPolicy::POLICY_BLOCKED_REDIRECTOR
+		])) {
 			return new Response($twig->render('admin/edit_policy.html.twig', $context + [
 				'entry' => compact('domain', 'policy', 'automated', 'comment'),
 				'error' => 2

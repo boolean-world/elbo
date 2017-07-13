@@ -29,9 +29,7 @@
               <option value="2" {% if form.policy == 2 %} selected {% endif %}>Blocked (Spam)</option>
               <option value="3" {% if form.policy == 3 %} selected {% endif %}>Blocked (Malware)</option>
               <option value="4" {% if form.policy == 4 %} selected {% endif %}>Blocked (Phishing)</option>
-              <option value="5" {% if form.policy == 5 %} selected {% endif %}>Blocked (PII)</option>
-              <option value="6" {% if form.policy == 6 %} selected {% endif %}>Blocked (Child abuse)</option>
-              <option value="7" {% if form.policy == 7 %} selected {% endif %}>Blocked (Violent crimes)</option>
+              <option value="5" {% if form.policy == 5 %} selected {% endif %}>Blocked (Illegal)</option>
               <option value="8" {% if form.policy == 8 %} selected {% endif %}>Blocked (Redirector)</option>
             </select>
           </div>
@@ -85,10 +83,6 @@
             Blocked (Phishing)
           {% elseif entry.policy == 4 %}
             Blocked (PII)
-          {% elseif entry.policy == 5 %}
-            Blocked (Child abuse)
-          {% elseif entry.policy == 6 %}
-            Blocked (Violent crime)
           {% elseif entry.policy == 7 %}
             Blocked (Redirector)
           {% endif %}

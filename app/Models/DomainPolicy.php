@@ -9,9 +9,7 @@ class DomainPolicy extends Model {
 	const POLICY_BLOCKED_SPAM = 1;
 	const POLICY_BLOCKED_MALWARE = 2;
 	const POLICY_BLOCKED_PHISHING = 3;
-	const POLICY_BLOCKED_PII = 4;
-	const POLICY_BLOCKED_CHILD_ABUSE = 5;
-	const POLICY_BLOCKED_VIOLENT_CRIME = 6;
+	const POLICY_BLOCKED_ILLEGAL_CONTENT = 4;
 	const POLICY_BLOCKED_REDIRECTOR = 7;
 
 	protected $table = 'domain_policy';
