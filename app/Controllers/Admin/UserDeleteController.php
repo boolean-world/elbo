@@ -2,8 +2,9 @@
 
 namespace Elbo\Controllers\Admin;
 
+use Elbo\Library\Controller;
+use Elbo\Models\{User, ShortenHistory, RememberToken};
 use Symfony\Component\HttpFoundation\{Request, Response};
-use Elbo\{Models\User, Models\ShortenHistory, Library\Controller};
 
 class UserDeleteController extends Controller {
 	use \Elbo\Middlewares\Session;
@@ -37,6 +38,7 @@ class UserDeleteController extends Controller {
 		}
 
 		ShortenHistory::where('userid', $data['userid'])->delete();
+		RememberToken::where('userid', $data['userid'])->delete();
 
 		$entry->delete();
 

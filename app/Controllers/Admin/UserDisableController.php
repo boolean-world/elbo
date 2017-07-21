@@ -2,7 +2,8 @@
 
 namespace Elbo\Controllers\Admin;
 
-use Elbo\{Models\User, Library\Controller};
+use Elbo\Library\Controller;
+use Elbo\Models\{User, RememberToken};
 use Symfony\Component\HttpFoundation\{Request, Response};
 
 class UserDisableController extends Controller {
@@ -38,6 +39,8 @@ class UserDisableController extends Controller {
 
 		$entry->disabled = true;
 		$entry->save();
+
+		RememberToken::where('userid', $data['userid'])->delete();
 
 		return new Response($twig->render('admin/user_disabled.html.twig', $context));
 	}
