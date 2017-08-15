@@ -61,7 +61,7 @@ class ShortenController extends Controller {
 				case URLShortenerException::PROHIBITED_URL:
 					return new JsonResponse([
 						'status' => false,
-						'reason' => 'invalid_url'
+						'reason' => 'prohibited_url'
 					]);
 			}
 		}

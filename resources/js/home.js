@@ -336,6 +336,9 @@ function shortenLink() {
 		else if (data.reason === "ratelimited") {
 			showAlert("You did not fill in the captcha.");
 		}
+		else if (data.reason === "prohibited_url") {
+			showAlert("This URL cannot be shortened. Please do not use a URL shortener link.");
+		}
 		else {
 			showAlert("Oops! Shortening that URL failed due to an unexpected error. If the problem persists, please <a href=\"https://www.booleanworld.com/contact-us\">contact us</a>.");
 		}
