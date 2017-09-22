@@ -7,9 +7,6 @@ use Elbo\{Library\Controller, Models\ShortURL};
 use Symfony\Component\{Filesystem\Filesystem, HttpFoundation\Request, HttpFoundation\Response};
 
 class QRImageController extends Controller {
-	use \Elbo\Middlewares\Session;
-	use \Elbo\Middlewares\ShortURLVerified;
-
 	public function run(Request $request, array &$data) {
 		$url = ShortURL::where('shorturl', $data['shorturl'])->select('url')->first();
 
