@@ -47,7 +47,7 @@ The following instructions discuss installation on Debian (and Debian derived sy
 		composer install
 		npm install
 
-* Copy `data/config/elbo.sample.yml` to `data/config/elbo.yml` and change the required values. Most importantly, `environment.phase` should be set to `production` and the values in the `api_key` section should be set.
+* Copy `data/config/elbo.sample.yml` to `data/config/elbo.yml` and change the required values. Most importantly, you should set `environment.phase` to `production`, and insert values in the `api_key` section. In addition, you should create an user and a table in MySQL (if you haven't done so already), and fill in the corresponding values in the `database` section.
 
 * Install the MaxMind GeoLite2 Country database.
 
