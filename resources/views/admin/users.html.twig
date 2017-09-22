@@ -47,7 +47,7 @@
         <th class="email-col">E-Mail</th>
         <th class="created-col">Created</th>
         <th class="login-col">Last login</th>
-        <th class="disabled-col">Disabled</th>
+        <th class="is-admin-col">Admin</th>
         <th class="actions-col"></th>
       </tr>
     </thead>
@@ -65,8 +65,8 @@
           <br>
           {{ entry.last_login_ip }}
         </td>
-        <td class="disabled-col">
-          {% if entry.disabled %}
+        <td class="is-admin-col">
+          {% if entry.admin %}
             Yes
           {% else %}
             No
