@@ -16,7 +16,7 @@ return function(FastRoute\RouteCollector $r) {
 	$r->post('/~signup', 'RegisterHandlerController');
 	$r->get('/~account', 'AccountController');
 	$r->post('/~account', 'AccountController');
-	$r->get('/~account/delete', 'AccountDeleteController');
+	$r->post('/~account/delete', 'AccountDeleteController');
 	$r->get('/~history', 'HistoryController');
 	$r->get('/~password/reset', 'PasswordResetPageController');
 	$r->post('/~password/reset', 'PasswordResetHandlerController');

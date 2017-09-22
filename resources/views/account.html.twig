@@ -156,8 +156,10 @@
         <p class="uppercase"><b>Please note that this cannot be undone.</b></p>
       </div>
       <div class="modal-footer">
-        <a href="/~account/delete" class="btn btn-danger">Yes</a>
-        <a class="btn btn-default" data-dismiss="modal">No</a>
+        <form method="POST" action="/~account/delete">
+          <input type="submit" class="btn btn-danger" value="Yes">
+          <a class="btn btn-default" data-dismiss="modal">No</a>
+        </form>
       </div>
     </div>
   </div>
