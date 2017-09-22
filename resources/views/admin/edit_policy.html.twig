@@ -3,5 +3,9 @@
 {% set disable_domain_editing = true %}
 
 {% block head %}
-<title>Edit Policy &mdash; Admin Panel</title>
+<title>Edit Policy for {{ entry.domain }} &mdash; Admin Panel</title>
+{% endblock %}
+
+{% block policy_editor_heading %}
+<h2>Edit policy for {{ entry.domain }}</h2>
 {% endblock %}
