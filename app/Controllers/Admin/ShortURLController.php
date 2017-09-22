@@ -57,7 +57,7 @@ class ShortURLController extends Controller {
 		}
 
 		if ($disabled === 1 || $disabled === 2) {
-			$query->where('disabled', $disabled === 1);
+			$query->where('short_url.disabled', $disabled === 1);
 		}
 
 		$entries = $query->get();
