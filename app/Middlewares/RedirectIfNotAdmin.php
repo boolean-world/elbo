@@ -3,14 +3,17 @@
 namespace Elbo\Middlewares;
 
 use Elbo\Models\User;
-use Symfony\Component\HttpFoundation\{Request, Response};
+use Symfony\Component\HttpFoundation\{Request, Response, RedirectResponse};
 
-trait NotFoundIfNotAdmin {
-	protected function notFoundIfNotAdmin(Request $request) {
+trait RedirectIfNotAdmin {
+	protected function redirectIfNotAdmin(Request $request) {
 		$userid = $this->session->get('userid');
 		$user = User::where('id', $userid)->first();
 
-		if ($user === null || $user->admin !== 1) {
+		if ($user === null) {
+			return new RedirectResponse('/~login?redirect='.urlencode($request->getPathInfo()));
+		}
+		else if ($user->admin !== 1) {
 			$twig = $this->container->get(\Twig_Environment::class);
 
 			return new Response($twig->render('errors/notfound.html.twig', [

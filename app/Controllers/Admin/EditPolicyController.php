@@ -8,12 +8,12 @@ use Elbo\{Models\DomainPolicy, Models\User, Library\Controller};
 class EditPolicyController extends Controller {
 	use \Elbo\Middlewares\Session;
 	use \Elbo\Middlewares\PersistLogin;
-	use \Elbo\Middlewares\NotFoundIfNotAdmin;
+	use \Elbo\Middlewares\RedirectIfNotAdmin;
 
 	protected $middlewares = [
 		'manageSession',
 		'persistLogin',
-		'notFoundIfNotAdmin'
+		'redirectIfNotAdmin'
 	];
 
 	public function run(Request $request, array &$data) {

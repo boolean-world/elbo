@@ -8,13 +8,13 @@ use Elbo\{Models\ShortURL, Models\User, Models\Stats, Models\ShortenHistory, Lib
 class ShortURLDeleteController extends Controller {
 	use \Elbo\Middlewares\Session;
 	use \Elbo\Middlewares\PersistLogin;
-	use \Elbo\Middlewares\NotFoundIfNotAdmin;
+	use \Elbo\Middlewares\RedirectIfNotAdmin;
 	use \Elbo\Middlewares\CSRFProtected;
 
 	protected $middlewares = [
 		'manageSession',
 		'persistLogin',
-		'notFoundIfNotAdmin',
+		'redirectIfNotAdmin',
 		'csrfProtected'
 	];
 
