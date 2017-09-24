@@ -8,9 +8,9 @@ use Symfony\Component\{Filesystem\Filesystem, HttpFoundation\Request, HttpFounda
 
 class QRImageController extends Controller {
 	public function run(Request $request, array &$data) {
-		$url = ShortURL::where('shorturl', $data['shorturl'])->select('url')->first();
+		$count = ShortURL::where('shorturl', $data['shorturl'])->count();
 
-		if ($url === null) {
+		if ($count === 0) {
 			return new Response('Invalid URL.', 400);
 		}
 
@@ -20,11 +20,8 @@ class QRImageController extends Controller {
 			return new Response('Invalid dimensions.', 400);
 		}
 
-		$hash = hash('sha256', $data['shorturl']);
-		$suffix = substr($hash, 0, 2);
-		$dir = __DIR__.'/../../data/tmp/qr/'.$suffix;
-		$filename = substr($hash, 2).'_'.$size.'.png';
-		$file = $dir.'/'.$filename;
+		$dir = __DIR__."/../../data/tmp/qr/${data['shorturl']}";
+		$file = "${dir}/${size}.png";
 
 		$fs = $this->container->get(Filesystem::class);
 
@@ -51,7 +48,7 @@ class QRImageController extends Controller {
 		}
 
 		if (substr($_SERVER['SERVER_SOFTWARE'], 0, 5) === 'nginx') {
-			$headers['X-Accel-Redirect'] = "/~qr/files/${suffix}/${filename}";
+			$headers['X-Accel-Redirect'] = "/~qr/files/${data['shorturl']}/${size}.png";
 			$content = '';
 		}
 		else {
