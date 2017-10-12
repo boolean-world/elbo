@@ -3,14 +3,10 @@
 namespace Elbo\Commands;
 
 use GuzzleHttp\Client;
+use Elbo\Library\Configuration;
 use Symfony\Component\Console\{Command\Command, Input\InputInterface, Output\OutputInterface};
 
 class UpdateDispEmailCommand extends Command {
-	const lists = [
-		'https://raw.githubusercontent.com/wesbos/burner-email-providers/master/emails.txt',
-		'https://raw.githubusercontent.com/martenson/disposable-email-domains/master/disposable_email_blacklist.conf'
-	];
-
 	protected function configure() {
 		$this->setName('update:dispemail')
 		     ->setDescription('Update blacklist of disposable email providers')
@@ -20,10 +16,17 @@ class UpdateDispEmailCommand extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$output->writeln('Starting blacklist update ('.strftime('%Y-%m-%d %H:%M:%S').')');
 
+		$config = new Configuration();
+		$lists = $config->get('email_policies');
+
+		if (!is_array($lists)) {
+			throw new \Exception('"email_policies" is configured incorrectly.');
+		}
+
 		$client = new Client();
 		$domains = [];
 
-		foreach (self::lists as $list) {
+		foreach ($lists as $list) {
 			$content = $client->get($list)->getBody();
 
 			$line = strtok($content, "\r\n");

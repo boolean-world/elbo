@@ -216,7 +216,7 @@ class URL {
 		return $this->protocol;
 	}
 
-	public function getHostname() {
+	public function getHost() {
 		return $this->hostname;
 	}
 

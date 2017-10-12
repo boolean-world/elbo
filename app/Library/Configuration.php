@@ -35,7 +35,7 @@ class Configuration {
 		foreach (explode('.', $key) as $i) {
 			if(!isset($ref[$i])) {
 				if ($throw_exception) {
-					throw new \RuntimeException("Configuration $key does not exist.");
+					throw new \RuntimeException("Configuration '$key' does not exist.");
 				}
 
 				return func_get_arg(1);

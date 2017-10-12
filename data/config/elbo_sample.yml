@@ -47,6 +47,58 @@ ratelimiter:
     requests: 5
     timeframe: 10
 
+# Domain policies configuration.
+# Be sure to set up blacklist updates, see README.md for more information.
+# Comment out this section to disable this functionality.
+url_policies:
+  # A regular expression to deny certain URLs.
+  # It is prefereable to use single quotes here so that writing regexes become
+  # simpler.
+  # Comment the line below to disable.
+  deny_urls: '/tmx\d+\.php'
+  # URLs from which the domain policy database should be populated. They may
+  # be classified into "malware", "phishing", "redirector", "illegal" or
+  # "spam" They are pulled from sources, which may be "hosts_files",
+  # "url_lists", "domain_lists" or "ip_lists", but any entries from the regex
+  # specified with "allow" are removed before populating the list.
+  sources:
+    malware:
+      domain_lists:
+        - https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt
+        - http://mirror1.malwaredomains.com/files/justdomains
+        - http://mirror1.malwaredomains.com/files/immortal_domains.txt
+        - https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt
+        - http://www.networksec.org/grabbho/block.txt
+        - https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist
+      ip_lists:
+        - http://rules.emergingthreats.net/blockrules/compromised-ips.txt
+        - https://zeustracker.abuse.ch/blocklist.php?download=badips
+        - https://ransomwaretracker.abuse.ch/downloads/RW_IPBL.txt
+      url_lists:
+        - https://cybercrime-tracker.net/all.php
+        - http://vxvault.net/URL_List.php
+      hosts_files:
+        - https://www.malwaredomainlist.com/hostslist/hosts.txt
+        - https://hosts-file.net/pup.txt
+    phishing:
+      url_lists:
+        - https://openphish.com/feed.txt
+    redirectors:
+      domain_lists:
+        - https://raw.githubusercontent.com/boolean-world/elbo/master/misc/blacklists/redirectors.txt
+    spam:
+      hosts_files:
+        - https://hosts-file.net/pha.txt
+    allow: '(?:^|\.)(?:disconnect\.me|(?:google|apple|dropbox)\.com)'
+
+# Email blacklist policies.
+# Blocks any email providers mentioned in the lists below (for registration)
+# Be sure to set up blacklist updates, see README.md for more information.
+# Comment out this section to disable this functionality.
+email_policies:
+  - https://raw.githubusercontent.com/wesbos/burner-email-providers/master/emails.txt
+  - https://raw.githubusercontent.com/martenson/disposable-email-domains/master/disposable_email_blacklist.conf
+
 # Mailer configuration
 mailer:
   from: test@example.com

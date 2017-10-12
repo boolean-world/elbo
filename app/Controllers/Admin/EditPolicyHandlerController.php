@@ -46,7 +46,7 @@ class EditPolicyHandlerController extends Controller {
 			DomainPolicy::POLICY_BLOCKED_SPAM,
 			DomainPolicy::POLICY_BLOCKED_MALWARE,
 			DomainPolicy::POLICY_BLOCKED_PHISHING,
-			DomainPolicy::POLICY_BLOCKED_ILLEGAL_CONTENT,
+			DomainPolicy::POLICY_BLOCKED_ILLEGAL,
 			DomainPolicy::POLICY_BLOCKED_REDIRECTOR
 		])) {
 			return new Response($twig->render('admin/edit_policy.html.twig', $context + [

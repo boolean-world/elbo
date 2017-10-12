@@ -41,7 +41,7 @@ class PoliciesController extends Controller {
 			DomainPolicy::POLICY_BLOCKED_SPAM,
 			DomainPolicy::POLICY_BLOCKED_MALWARE,
 			DomainPolicy::POLICY_BLOCKED_PHISHING,
-			DomainPolicy::POLICY_BLOCKED_ILLEGAL_CONTENT,
+			DomainPolicy::POLICY_BLOCKED_ILLEGAL,
 			DomainPolicy::POLICY_BLOCKED_REDIRECTOR
 		])) {
 			$query->where('policy', $policy - 1);

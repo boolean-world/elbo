@@ -1,7 +1,5 @@
 <?php
 
-namespace FluoroLime\Exceptions;
+namespace Elbo\Exceptions;
 
-class SessionException extends \Exception {
-	
-}
+class SessionException extends \Exception {}

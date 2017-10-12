@@ -36,24 +36,6 @@ return (function() {
 	$containerBuilder->addDefinitions([
 		Elbo\Library\Configuration::class => $config,
 
-		Elbo\Library\Session::class => DI\object(Elbo\Library\Session::class),
-
-		Elbo\Library\URLShortener::class => DI\object(Elbo\Library\URLShortener::class),
-
-		Elbo\Library\EmailValidator::class => DI\object(Elbo\Library\EmailValidator::class),
-
-		Symfony\Component\Filesystem\Filesystem::class => DI\object(Symfony\Component\Filesystem\Filesystem::class),
-
-		BaconQrCode\Writer::class => DI\object(BaconQrCode\Writer::class),
-
-		BaconQrCode\Renderer\RendererInterface::class => DI\object(BaconQrCode\Renderer\Image\Png::class),
-
-		Elbo\RateLimiters\LoginRateLimiter::class => DI\object(Elbo\RateLimiters\LoginRateLimiter::class),
-
-		Elbo\RateLimiters\AnonShortenRateLimiter::class => DI\object(Elbo\RateLimiters\AnonShortenRateLimiter::class),
-
-		Elbo\RateLimiters\UserShortenRateLimiter::class => DI\object(Elbo\RateLimiters\UserShortenRateLimiter::class),
-
 		ReCaptcha\ReCaptcha::class => function(Elbo\Library\Configuration $config) {
 			return new ReCaptcha\ReCaptcha($config->get('api_key.recaptcha_secret_key'));
 		},

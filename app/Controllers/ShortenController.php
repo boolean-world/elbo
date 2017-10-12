@@ -3,9 +3,9 @@
 namespace Elbo\Controllers;
 
 use ReCaptcha\ReCaptcha;
-use Elbo\Exceptions\{InvalidURLException, URLShortenerException};
 use Elbo\{Models\Stats, Library\URLShortener, Library\Controller};
 use Symfony\Component\HttpFoundation\{Request, Response, JsonResponse};
+use Elbo\Exceptions\{InvalidURLException, URLShortenerException, UnsafeURLException};
 
 class ShortenController extends Controller {
 	use \Elbo\Middlewares\Session;
@@ -41,29 +41,29 @@ class ShortenController extends Controller {
 				'reason' => 'invalid_url'
 			]);
 		}
+		catch (UnsafeURLException $e) {
+			return new JsonResponse([
+				'status' => false,
+				'reason' => 'prohibited_url'
+			]);
+		}
 		catch (URLShortenerException $e) {
-			switch ($e->getCode()) {
-				case URLShortenerException::SHORTURL_INVALID:
-					return new JsonResponse([
-						'status' => false,
-						'reason' => 'shorturl_invalid'
-					]);
-				case URLShortenerException::SHORTURL_CREATION_FAILED:
-					return new JsonResponse([
-						'status' => false,
-						'reason' => 'internal_error'
-					]);
-				case URLShortenerException::SHORTURL_TAKEN:
-					return new JsonResponse([
-						'status' => false,
-						'reason' => 'shorturl_taken'
-					]);
-				case URLShortenerException::PROHIBITED_URL:
-					return new JsonResponse([
-						'status' => false,
-						'reason' => 'prohibited_url'
-					]);
+			$code = $e->getCode();
+
+			if ($code === URLShortenerException::SHORTURL_INVALID) {
+				$reason = 'shorturl_invalid';
 			}
+			else if ($code === URLShortenerException::SHORTURL_CREATION_FAILED) {
+				$reason = 'internal_error';
+			}
+			else if ($code === URLShortenerException::SHORTURL_TAKEN) {
+				$reason = 'shorturl_taken';
+			}
+
+			return new JsonResponse([
+				'status' => false,
+				'reason' => $reason
+			]);
 		}
 	}
 }
