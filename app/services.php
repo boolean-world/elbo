@@ -36,6 +36,8 @@ return (function() {
 	$containerBuilder->addDefinitions([
 		Elbo\Library\Configuration::class => $config,
 
+		BaconQrCode\Renderer\RendererInterface::class => DI\object(BaconQrCode\Renderer\Image\Png::class),
+
 		ReCaptcha\ReCaptcha::class => function(Elbo\Library\Configuration $config) {
 			return new ReCaptcha\ReCaptcha($config->get('api_key.recaptcha_secret_key'));
 		},
