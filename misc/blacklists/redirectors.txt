@@ -34,6 +34,7 @@ be.cm
 bit.do
 bitigee.com
 bit.ly
+bitsy.in
 biturl.io
 blankrefer.com
 brief.ly
@@ -58,9 +59,11 @@ doshort.com
 dwz.cn
 easyurl.net
 eepurl.com
+elbo.in
 emp.me
 fas.st
 fkref.com
+flyt.it
 g5u.pw
 gee.su
 gentleurl.net
@@ -127,6 +130,7 @@ ouo.press
 ow.ly
 parg.co
 picocurl.com
+pm.vu
 pnut.co
 polr.me
 portal.jin.ni
@@ -137,6 +141,7 @@ qurl.pw
 readthis.ca
 redirect.me
 redirects.ca
+re.tc
 ri.ms
 s007.co
 s2r.co
@@ -174,6 +179,7 @@ taut.pw
 t.co
 thatis.me
 thecow.me
+thesaferedirect.com
 theurl.co
 thinfi.com
 tiny.cc
