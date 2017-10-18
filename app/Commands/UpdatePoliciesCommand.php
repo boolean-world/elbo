@@ -110,7 +110,7 @@ class UpdatePoliciesCommand extends Command {
 		$filterRegex = $config->get('url_policies.allow', null);
 
 		if ($filterRegex !== null) {
-			$filterRegex = '/'.str_replace('/', '\/', $filterRegex).'/';
+			$filterRegex = '/'.str_replace('/', '\/', $filterRegex).'/i';
 		}
 
 		$output->writeln('Beginning transaction...');

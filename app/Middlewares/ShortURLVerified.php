@@ -31,7 +31,7 @@ trait ShortURLVerified {
 		$deny_regex = $config->get('url_policies.deny_urls', null);
 
 		if ($deny_regex !== null && $deny_regex !== "") {
-			$deny_regex = '/'.str_replace('/', '\/', $deny_regex).'/';
+			$deny_regex = '/'.str_replace('/', '\/', $deny_regex).'/i';
 
 			if (preg_match($deny_regex, $res->url)) {
 				$twig = $this->container->get(\Twig_Environment::class);

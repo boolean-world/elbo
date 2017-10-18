@@ -17,7 +17,7 @@ class URLInfoCollector {
 			$this->deny_regex = null;
 		}
 		else {
-			$this->deny_regex = '/'.str_replace('/', '\/', $deny_regex).'/';
+			$this->deny_regex = '/'.str_replace('/', '\/', $deny_regex).'/i';
 		}
 
 		$this->client = new Client([
