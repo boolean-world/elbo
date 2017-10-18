@@ -102,7 +102,7 @@ class URLInfoCollector {
 				'stream' => true,
 				'timeout' => 5,
 				'connect_timeout' => 5,
-				'on_stats' => function(TransferStats $stats) use ($initial_url_traversed) {
+				'on_stats' => function(TransferStats $stats) use (&$initial_url_traversed) {
 					if ($initial_url_traversed) {
 						if (!$this->isURLSafe($stats->getEffectiveUri())) {
 							throw new UnsafeURLException();

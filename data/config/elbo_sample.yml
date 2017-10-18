@@ -83,7 +83,7 @@ url_policies:
     phishing:
       url_lists:
         - https://openphish.com/feed.txt
-    redirectors:
+    redirector:
       domain_lists:
         - https://raw.githubusercontent.com/boolean-world/elbo/master/misc/blacklists/redirectors.txt
     spam:
