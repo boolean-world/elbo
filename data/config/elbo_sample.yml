@@ -84,8 +84,8 @@ url_policies:
       url_lists:
         - https://openphish.com/feed.txt
     redirector:
-      domain_lists:
-        - https://raw.githubusercontent.com/boolean-world/elbo/master/misc/blacklists/redirectors.txt
+      hosts_files:
+        - https://raw.githubusercontent.com/supriyo-biswas/hostsfiles/master/lists/redirectors.txt
     spam:
       hosts_files:
         - https://hosts-file.net/pha.txt
