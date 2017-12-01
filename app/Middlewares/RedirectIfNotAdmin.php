@@ -7,8 +7,8 @@ use Symfony\Component\HttpFoundation\{Request, Response, RedirectResponse};
 
 trait RedirectIfNotAdmin {
 	protected function redirectIfNotAdmin(Request $request) {
-		$userid = $this->session->get('userid');
-		$user = User::where('id', $userid)->first();
+		$id = $this->session->get('userid');
+		$user = User::where('id', $id)->where('disabled', '<>', 1)->select('admin')->first();
 
 		if ($user === null) {
 			return new RedirectResponse('/~login?redirect='.urlencode($request->getPathInfo()));

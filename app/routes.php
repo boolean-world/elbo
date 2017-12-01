@@ -9,6 +9,7 @@ return function(FastRoute\RouteCollector $r) {
 	$r->get('/~qr/img/{shorturl:[A-Za-z0-9-]{1,70}}', 'QRImageController');
 
 	// Controllers for the registered users.
+	$r->get('/~home', 'HomeController');
 	$r->get('/~login', 'LoginPageController');
 	$r->post('/~login', 'LoginHandlerController');
 	$r->get('/~logout', 'LogoutController');
