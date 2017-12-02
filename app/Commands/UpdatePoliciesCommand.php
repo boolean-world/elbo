@@ -72,6 +72,16 @@ class UpdatePoliciesCommand extends Command {
 		}
 	}
 
+	protected function processSerializedPhpGzip(string $data, array &$array, int $value) {
+		foreach (unserialize(gzdecode($data)) as $item) {
+			if (preg_match(self::extract_domain_regex, $item['url'], $matches)) {
+				$rule = strtolower(preg_replace('/\:[0-9]+$/', '', $matches[1]));
+				$rule = preg_replace('/^www\.(.{4,}\..{2,})/', '\1', $rule);
+				$array[$rule] = $value;
+			}
+		}
+	}
+
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$output->writeln('Starting policy update ('.strftime('%Y-%m-%d %H:%M:%S').')');
 
@@ -86,24 +96,20 @@ class UpdatePoliciesCommand extends Command {
 			'redirector' => DomainPolicy::POLICY_BLOCKED_REDIRECTOR,
 			'spam' => DomainPolicy::POLICY_BLOCKED_SPAM
 		] as $key => $value) {
-			foreach ($config->get("url_policies.sources.${key}.hosts_files", []) as $f) {
-				$output->writeln("Downloading and processing ${f}...");
-				$this->processHostsFile($client->get($f)->getBody(), $domains, $value);
-			}
+			foreach ([
+				'hosts_files' => 'processHostsFile',
+				'domain_lists' => 'processDomainList',
+				'url_lists' => 'processURLList',
+				'ip_lists' => 'processIPList',
+				'serialized_php_gz' => 'processSerializedPhpGzip'
+			] as $type => $processor) {
+				foreach ($config->get("url_policies.sources.${key}.${type}", []) as $entry) {
+					$output->writeln("Download: ${entry}");
+					$data = $client->get($entry)->getBody();
 
-			foreach ($config->get("url_policies.sources.${key}.domain_lists", []) as $f) {
-				$output->writeln("Downloading and processing ${f}...");
-				$this->processDomainList($client->get($f)->getBody(), $domains, $value);
-			}
-
-			foreach ($config->get("url_policies.sources.${key}.url_lists", []) as $f) {
-				$output->writeln("Downloading and processing ${f}...");
-				$this->processURLList($client->get($f)->getBody(), $domains, $value);
-			}
-
-			foreach ($config->get("url_policies.sources.${key}.ip_lists", []) as $f) {
-				$output->writeln("Downloading and processing ${f}...");
-				$this->processIPList($client->get($f)->getBody(), $domains, $value);
+					$output->writeln("Process : ${entry}");
+					$this->$processor($data, $domains, $value);
+				}
 			}
 		}
 

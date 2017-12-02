@@ -59,8 +59,9 @@ url_policies:
   # URLs from which the domain policy database should be populated. They may
   # be classified into "malware", "phishing", "redirector", "illegal" or
   # "spam" They are pulled from sources, which may be "hosts_files",
-  # "url_lists", "domain_lists" or "ip_lists", but any entries from the regex
-  # specified with "allow" are removed before populating the list.
+  # "url_lists", "domain_lists", "ip_lists", or "serialized_php_gz", but any
+  # entries from the regex specified with "allow" are removed before
+  # populating the list.
   sources:
     malware:
       domain_lists:
@@ -83,6 +84,8 @@ url_policies:
     phishing:
       url_lists:
         - https://openphish.com/feed.txt
+      serialized_php_gz:
+        - http://data.phishtank.com/data/online-valid.php_serialized.gz
     redirector:
       hosts_files:
         - https://raw.githubusercontent.com/supriyo-biswas/hostsfiles/master/lists/redirectors.txt
