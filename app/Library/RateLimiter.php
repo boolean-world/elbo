@@ -8,12 +8,16 @@ abstract class RateLimiter {
 	protected $redis;
 	protected $requests;
 	protected $timeframe;
-	protected $redis_key_prefix;
+	protected static $prefix = null;
 
 	public function __construct(Configuration $config, \Redis $redis) {
 		$this->redis = $redis;
-		$prefix = $this->getPrefix(get_called_class());
-		$this->redis_key_prefix = "elbo:rl:$prefix:";
+
+		if (self::$prefix === null) {
+			self::$prefix = $this->getPrefix(get_called_class());
+		}
+
+		$prefix = self::$prefix;
 		$this->requests = $config->get("ratelimiter.$prefix.requests", 5);
 		$this->timeframe = $config->get("ratelimiter.$prefix.timeframe", 1);
 	}
@@ -46,7 +50,7 @@ abstract class RateLimiter {
 	}
 
 	protected function getKey(string $identifier) {
-		return $this->redis_key_prefix.$identifier;
+		return 'elbo:rl:'.self::$prefix.':'.$identifier;
 	}
 
 	public function increment(string $identifier) {
