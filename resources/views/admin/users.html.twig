@@ -91,10 +91,10 @@
           }) }}" title="Disable user"><i class="fa fa-1_5x text-danger fa-ban"></i></a>
           {% endif %}
           <a href="{{ url('/~admin/user/delete/' ~ entry.id, {
-            r_domain: form.domain,
-            r_automated: form.automated,
-            r_policy: form.policy,
-            r_comment: form.comment,
+            r_email: form.email,
+            r_disabled: form.disabled,
+            r_created_ip: form.created_ip,
+            r_last_login_ip: form.last_login_ip,
             r_n: pagenum
           }) }}"><i title="Delete user" class="fa fa-1_5x text-danger fa-trash"></i></a>
     {% endfor %}
@@ -105,10 +105,10 @@
     <div class="col-xs-6">
       {% if pagenum > 0 %}
         <a href="{{ url('/~admin/users', {
-          domain: form.domain,
-          automated: form.automated,
-          policy: form.policy,
-          comment: form.comment,
+          email: form.email,
+          disabled: form.disabled,
+          created_ip: form.created_ip,
+          last_login_ip: form.last_login_ip,
           n: pagenum - 1
         }) }}" class="btn btn-default"><i class="fa fa-chevron-left"></i> Previous</a>
       {% endif %}
@@ -116,10 +116,10 @@
     <div class="col-xs-6">
       {% if has_more %}
         <a href="{{ url('/~admin/users', {
-          domain: form.domain,
-          automated: form.automated,
-          policy: form.policy,
-          comment: form.comment,
+          email: form.email,
+          disabled: form.disabled,
+          created_ip: form.created_ip,
+          last_login_ip: form.last_login_ip,
           n: pagenum + 1
         }) }}" class="btn btn-default pull-right">Next <i class="fa fa-chevron-right"></i></a>
       {% endif %}
