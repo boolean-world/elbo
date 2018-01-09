@@ -113,7 +113,7 @@ class UpdatePoliciesCommand extends Command {
 			}
 		}
 
-		$filterRegex = $config->get('url_policies.allow', null);
+		$filterRegex = $config->get('url_policies.sources.allow', null);
 
 		if ($filterRegex !== null) {
 			$filterRegex = '/'.str_replace('/', '\/', $filterRegex).'/i';
