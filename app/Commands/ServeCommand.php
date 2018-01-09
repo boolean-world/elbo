@@ -14,6 +14,6 @@ class ServeCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$port = $input->getArgument('port');
-		pcntl_exec('/usr/bin/env', ['php', '-S', "0.0.0.0:$port", '-t', 'public', 'public/index.php']);
+		pcntl_exec('/usr/bin/env', ['php', '-S', "0.0.0.0:$port", '-t', 'public', 'index.php']);
 	}
 }
