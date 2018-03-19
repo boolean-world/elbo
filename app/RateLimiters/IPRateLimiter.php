@@ -15,8 +15,8 @@ abstract class IPRateLimiter extends RateLimiter {
 		if (strlen($key) === 8) { // IPv4
 			return 'elbo:rl:'.self::$prefix.':4_'.$key;
 		}
-		else { // IPv6 /80 subnet
-			return 'elbo:rl:'.self::$prefix.':6_'.substr($key, 0, 20);
+		else { // IPv6 /112 subnet
+			return 'elbo:rl:'.self::$prefix.':6_'.substr($key, 0, -4);
 		}
 	}
 }
