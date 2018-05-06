@@ -2,23 +2,26 @@
   "name": "elbo",
   "version": "0.0.1",
   "description": "Source code for [elbo](http://elbo.in/), an URL shortening service.",
-  "main": " ",
+  "main": "gulpfile.js",
   "scripts": {
-    "test": " "
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": " "
+    "url": "git+https://github.com/boolean-world/elbo.git"
   },
-  "keywords": [],
   "author": "",
   "license": "SEE LICENSE IN LICENSE.md",
+  "bugs": {
+    "url": "https://github.com/boolean-world/elbo/issues"
+  },
+  "homepage": "https://github.com/boolean-world/elbo#readme",
   "dependencies": {
-    "del": "^2.2.2",
+    "del": "^3.0.0",
     "gulp": "^3.9.1",
-    "gulp-clean-css": "^3.0.4",
-    "gulp-imagemin": "^3.2.0",
-    "gulp-uglify": "^2.1.2",
-    "yamljs": "^0.2.8"
+    "gulp-clean-css": "^3.9.4",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-uglify": "^3.0.0",
+    "yamljs": "^0.3.0"
   }
 }
