@@ -1,6 +1,8 @@
 /data/
+/.vagrant/
 /vendor/
 /node_modules/
 /public/assets/
 *.swp
-.DS_Store
+*.log
+*.DS_Store
