@@ -6,37 +6,27 @@ return (function() {
 	$config = new Elbo\Library\Configuration();
 
 	if ($config->get('environment.phase') === 'production') {
-		$redis = new Redis();
-		$redis->connect($config->get('redis.host'), $config->get('redis.port'));
-
-		$cache = new Doctrine\Common\Cache\RedisCache();
-		$cache->setRedis($redis);
-		$cache->setNamespace('elbo:sc:');
-
-		$containerBuilder->setDefinitionCache($cache);
-
-		$containerBuilder->addDefinitions([
-			Redis::class => $redis
-		]);
-	}
-	else {
-		$cache = new Doctrine\Common\Cache\ArrayCache();
-		$containerBuilder->setDefinitionCache($cache);
-
-		$containerBuilder->addDefinitions([
-			Redis::class => function(Elbo\Library\Configuration $config) {
-				$redis = new Redis();
-				$redis->connect($config->get('redis.host'), $config->get('redis.port'));
-
-				return $redis;
-			}
-		]);
+		$containerBuilder->enableCompilation(__DIR__.'/../data/cache');
 	}
 
 	$containerBuilder->addDefinitions([
 		Elbo\Library\Configuration::class => $config,
 
-		BaconQrCode\Renderer\RendererInterface::class => DI\object(BaconQrCode\Renderer\Image\Png::class),
+		Redis::class => function(Elbo\Library\Configuration $config) {
+			$redis = new Redis();
+			$socket = $config->get('redis.socket', null);
+
+			if ($socket !== null) {
+				$redis->connect($socket);
+			}
+			else {
+				$redis->connect($config->get('redis.host'), $config->get('redis.port'));
+			}
+
+			return $redis;
+		},
+
+		BaconQrCode\Renderer\RendererInterface::class => DI\create(BaconQrCode\Renderer\Image\Png::class),
 
 		ReCaptcha\ReCaptcha::class => function(Elbo\Library\Configuration $config) {
 			return new ReCaptcha\ReCaptcha($config->get('api_key.recaptcha_secret_key'));

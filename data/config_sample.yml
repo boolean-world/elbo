@@ -22,8 +22,10 @@ database:
 
 # Redis details
 redis:
-  host: 127.0.0.1
-  port: 6379
+  socket: /var/run/redis/redis.sock
+  # If Unix sockets are not available, use
+  # host: "127.0.0.1"
+  # port: 6379
 
 # Various configurable keys for APIs and services.
 api_key:
@@ -35,7 +37,8 @@ api_key:
 # The "timeframe" value is the number of minutes for which the specified number
 # of "requests" are allowed. If these values are omitted, a default of 5
 # requests/minute is assumed.
-# IP-based ratelimiters apply to individual IPv4 addresses or IPv6 /80 subnets.
+# IP-based ratelimiters apply to individual IPv4 addresses or IPv6 /112
+# subnets.
 ratelimiter:
   anon_shorten:
     requests: 10

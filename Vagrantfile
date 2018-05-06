@@ -17,6 +17,8 @@ Vagrant.configure("2") do |config|
     apt-get purge -y snapd lxcfs lxd ed ftp ufw accountsservice policykit-1
     apt-get autoremove -y
     apt-get update
+    sed -ri 's/^bind /#&/;s/^(port ).*$/\\10/;s/^# (unixsocket)/\\1/;s/^(unixsocketperm )[0-9]+/\\1777/' /etc/redis/redis.conf
+    systemctl restart redis-server.service
     apt-get install -y htop git unzip php-zip php-cli php-gd php-mbstring php-curl php-intl php-bcmath php-mbstring php-gmp php-mysql php-redis mysql-server mysql-client redis-server redis-tools nodejs
     apt-get upgrade -y
     mkdir -p /home/vagrant/.local/bin/

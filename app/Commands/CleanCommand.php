@@ -19,5 +19,6 @@ class CleanCommand extends Command {
 		$app->find('clean:routes')->run($emptyargs, $output);
 		$app->find('clean:config')->run($emptyargs, $output);
 		$app->find('clean:templates')->run($emptyargs, $output);
+		$app->find('clean:container')->run($emptyargs, $output);
 	}
 }

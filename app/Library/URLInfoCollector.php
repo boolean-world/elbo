@@ -37,11 +37,6 @@ class URLInfoCollector {
 	}
 
 	protected function isHostAllowed($host) {
-		# If the cache has been used for quite a few entries, clean it up.
-		if (count($this->policy_cache) > 20) {
-			$this->policy_cache = [];
-		}
-
 		if (!isset($this->policy_cache[$host])) {
 			$this->policy_cache[$host] = DomainPolicy::isAllowed($host);
 		}

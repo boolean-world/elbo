@@ -13,6 +13,7 @@ $cmdclassnames = [
 	Elbo\Commands\TemplatesCleanCommand::class,
 	Elbo\Commands\RoutesCleanCommand::class,
 	Elbo\Commands\ConfigCleanCommand::class,
+	Elbo\Commands\ContainerCleanCommand::class,
 	Elbo\Commands\TempFilesCleanCommand::class,
 	Elbo\Commands\MigrationsInstallCommand::class,
 	Elbo\Commands\MigrationsRemoveCommand::class,

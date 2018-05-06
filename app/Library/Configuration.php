@@ -20,7 +20,7 @@ class Configuration {
 			$this->config = $res;
 		}
 		else {
-			$this->config = Yaml::parse(file_get_contents(__DIR__.'/../../data/config/elbo.yml'));
+			$this->config = Yaml::parse(file_get_contents(__DIR__.'/../../data/config.yml'));
 
 			if (($this->config['environment']['phase'] ?? null) === 'production') {
 				file_put_contents($cachefile, '<?php return '.var_export($this->config, true).';');

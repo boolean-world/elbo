@@ -18,7 +18,7 @@ In production, views, routes and configuration are cached and they need to be cl
 
 ## Installation
 
-This application has been tested with PHP >= 7, nodejs >= 6 and nginx >= 1.10.0, although it may run with lower versions. An installation of MySQL is required.
+This application has been tested with PHP 7.2, nodejs 8.x and nginx >= 1.10.0, although it may run with lower versions. MySQL and Redis are required for the application to run.
 
 The following instructions discuss installation on Debian (and Debian derived systems, such as Ubuntu).
 
@@ -47,7 +47,7 @@ The following instructions discuss installation on Debian (and Debian derived sy
 		composer install
 		npm install
 
-* Copy `data/config/elbo.sample.yml` to `data/config/elbo.yml` and change the required values. Most importantly, you should set `environment.phase` to `production`, and insert values in the `api_key` section. In addition, you should create an user and a table in MySQL (if you haven't done so already), and fill in the corresponding values in the `database` section.
+* Copy `data/config_sample.yml` to `data/config.yml` and change the required values. Most importantly, you should set `environment.phase` to `production`, and insert values in the `api_key` section. In addition, you should create an user and a table in MySQL (if you haven't done so already), and fill in the corresponding values in the `database` section. You should also change the values under the `redis` section as necessary.
 
 * Install the MaxMind GeoLite2 Country database.
 

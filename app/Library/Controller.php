@@ -2,7 +2,7 @@
 
 namespace Elbo\Library;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class Controller {

@@ -6,10 +6,9 @@
         "sinergi/browser-detector": "^6.1",
         "google/recaptcha": "^1.1",
         "symfony/yaml": "^4.0",
-        "php-di/php-di": "^5.4",
+        "php-di/php-di": "^6.0",
         "guzzlehttp/guzzle": "^6.2",
         "symfony/console": "^4.0",
-        "doctrine/cache": "^1.6",
         "illuminate/database": "^5.4",
         "nette/mail": "^2.4",
         "maxmind-db/reader": "^1.1",
@@ -25,6 +24,6 @@
         ]
     },
     "require-dev": {
-        "psy/psysh": "^0.8.1"
+        "psy/psysh": "^0.9"
     }
 }
