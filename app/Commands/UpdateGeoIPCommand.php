@@ -3,6 +3,7 @@
 namespace Elbo\Commands;
 
 use GuzzleHttp\Client;
+use Symfony\Component\FileSystem\FileSystem;
 use Symfony\Component\Console\{Command\Command, Input\InputInterface, Output\OutputInterface};
 
 class UpdateGeoIPCommand extends Command {
@@ -18,9 +19,10 @@ class UpdateGeoIPCommand extends Command {
 		$output->writeln('Starting GeoIP database update ('.strftime('%Y-%m-%d %H:%M:%S').')');
 
 		$client = new Client();
+		$fs = new FileSystem();
 
 		$db_gzip = $client->get(self::maxmind_geoipdb_url)->getBody();
-		file_put_contents('data/GeoLite2-Country.mmdb', gzdecode($db_gzip));
+		$fs->dumpFile('data/GeoLite2-Country.mmdb', gzdecode($db_gzip));
 
 		$output->writeln('GeoIP database updated successfully.');
 	}
