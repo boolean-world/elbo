@@ -60,11 +60,9 @@ url_policies:
   # Comment the line below to disable.
   deny_urls: '/tmx\d+\.php'
   # URLs from which the domain policy database should be populated. They may
-  # be classified into "malware", "phishing", "redirector", "illegal" or
-  # "spam" They are pulled from sources, which may be "hosts_files",
-  # "url_lists", "domain_lists", "ip_lists", or "serialized_php_gz", but any
-  # entries from the regex specified with "allow" are removed before
-  # populating the list.
+  # be classified into "malware", "phishing", "redirector", "illegal", "spam"
+  # or "allowed". They are pulled from sources, which may be "hosts_files",
+  # "url_lists", "domain_lists", "ip_lists", or "serialized_php_gz".
   sources:
     malware:
       domain_lists:
@@ -95,7 +93,6 @@ url_policies:
     spam:
       hosts_files:
         - https://hosts-file.net/pha.txt
-    allow: '(?:^|\.)(?:disconnect\.me|(?:google|apple|dropbox)\.com)'
 
 # Email blacklist policies.
 # Blocks any email providers mentioned in the lists below (for registration)

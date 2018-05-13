@@ -94,7 +94,8 @@ class UpdatePoliciesCommand extends Command {
 			'phishing' => DomainPolicy::POLICY_BLOCKED_PHISHING,
 			'illegal' => DomainPolicy::POLICY_BLOCKED_ILLEGAL,
 			'redirector' => DomainPolicy::POLICY_BLOCKED_REDIRECTOR,
-			'spam' => DomainPolicy::POLICY_BLOCKED_SPAM
+			'spam' => DomainPolicy::POLICY_BLOCKED_SPAM,
+			'allowed' => DomainPolicy::POLICY_ALLOWED
 		] as $key => $value) {
 			foreach ([
 				'hosts_files' => 'processHostsFile',
@@ -111,12 +112,6 @@ class UpdatePoliciesCommand extends Command {
 					$this->$processor($data, $domains, $value);
 				}
 			}
-		}
-
-		$filterRegex = $config->get('url_policies.sources.allow', null);
-
-		if ($filterRegex !== null) {
-			$filterRegex = '/'.str_replace('/', '\/', $filterRegex).'/i';
 		}
 
 		$output->writeln('Beginning transaction...');
