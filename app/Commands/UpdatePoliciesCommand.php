@@ -37,7 +37,7 @@ class UpdatePoliciesCommand extends Command {
 			$line = preg_replace('/^\s*[0-9:.]+\s*|\s*#.*$/', '', $line);
 
 			if (preg_match(self::domain_regex, $line)) {
-				$rule = preg_replace('/^(?:www|\d{3,}[a-z\d]{4,})\.(.{4,}\..{2,})/', '\1', strtolower($line));
+				$rule = preg_replace('/^www\.(.{4,}\..{2,})/', '\1', strtolower($line));
 				$array[$rule] = $value;
 			}
 
@@ -116,7 +116,7 @@ class UpdatePoliciesCommand extends Command {
 
 		$output->writeln('Beginning transaction...');
 
-		DB::transaction(function() use ($output, $domains, $filterRegex) {
+		DB::transaction(function() use ($output, $domains) {
 			$output->writeln('Removing previous automatic rules...');
 			DomainPolicy::where('automated', true)->delete();
 
@@ -124,7 +124,7 @@ class UpdatePoliciesCommand extends Command {
 			foreach ($domains as $domain => $policy) {
 				$count = DomainPolicy::where('domain', $domain)->count();
 
-				if ($count === 0 && ($filterRegex === null || !preg_match($filterRegex, $domain))) {
+				if ($count === 0) {
 					DomainPolicy::create([
 						'domain' => $domain,
 						'automated' => true,
