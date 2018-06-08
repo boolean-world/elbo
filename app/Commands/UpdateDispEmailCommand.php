@@ -4,6 +4,7 @@ namespace Elbo\Commands;
 
 use GuzzleHttp\Client;
 use Elbo\Library\Configuration;
+use Symfony\Component\FileSystem\FileSystem;
 use Symfony\Component\Console\{Command\Command, Input\InputInterface, Output\OutputInterface};
 
 class UpdateDispEmailCommand extends Command {
@@ -38,7 +39,7 @@ class UpdateDispEmailCommand extends Command {
 			}
 		}
 
-		$fs->dumpFile('data/disposable-email-domains'
+		$fs->dumpFile('data/disposable-email-domains',
 			'<?php return function($x) { $y = '.var_export($domains, true).'; return !isset($y[$x]);};'
 		);
 
