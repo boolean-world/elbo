@@ -24,6 +24,7 @@ class UpdateDispEmailCommand extends Command {
 		}
 
 		$client = new Client();
+		$fs = new FileSystem();
 		$domains = [];
 
 		foreach ($lists as $list) {
@@ -37,7 +38,7 @@ class UpdateDispEmailCommand extends Command {
 			}
 		}
 
-		file_put_contents('data/disposable-email-domains',
+		$fs->dumpFile('data/disposable-email-domains'
 			'<?php return function($x) { $y = '.var_export($domains, true).'; return !isset($y[$x]);};'
 		);
 
