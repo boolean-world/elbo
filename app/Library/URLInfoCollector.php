@@ -2,10 +2,12 @@
 
 namespace Elbo\Library;
 
-use GuzzleHttp\{Client, TransferStats};
 use Elbo\{Models\DomainPolicy, Exceptions\UnsafeURLException};
+use GuzzleHttp\{Client, TransferStats, Psr7\Uri, Psr7\UriResolver};
 
 class URLInfoCollector {
+	const max_redirects = 4;
+
 	protected $client;
 	protected $deny_regex;
 	protected $policy_cache = [];
@@ -28,11 +30,8 @@ class URLInfoCollector {
 				'Accept-Language' => 'en-US',
 				'DNT' => '1'
 			],
-			'allow_redirects' => [
-				'referer' => true,
-				'max_redirects' => 4
-			],
-			'cookies' => true
+			'allow_redirects' => false,
+			'exceptions' => false
 		]);
 	}
 
@@ -58,8 +57,11 @@ class URLInfoCollector {
 		return preg_match($this->deny_regex, (string)$url) !== 1;
 	}
 
-	protected static function strip($str) {
-		return preg_replace('/\s+/', ' ', trim($str));
+	function stripHTMLSpaces($str) {
+		static $find = ['/\s*<\s*/', '/\s*>\s*/', '/\s+/'];
+		static $replace = ['<', '>', ' ', ''];
+
+		return preg_replace($find, $replace, trim($str));
 	}
 
 	protected static function getTitle(string $str) {
@@ -67,7 +69,7 @@ class URLInfoCollector {
 			return null;
 		}
 
-		$title = self::strip(html_entity_decode($matches[1], ENT_QUOTES));
+		$title = html_entity_decode($matches[1], ENT_QUOTES);
 
 		# The title won't be usable if it's empty or non-UTF8
 		if ($title === '' || !mb_check_encoding($title, "UTF-8")) {
@@ -77,8 +79,8 @@ class URLInfoCollector {
 		return mb_substr($title, 0, 100);
 	}
 
-	protected static function getMetaRedirectHost(string $str) {
-		if (preg_match('~<\s*meta\s+[^>]*http-equiv\s*=\s*["\']?\s*refresh\s*["\']?\s+[^>]*content\s*=\s*["\']?\s*\d+\s*;\s*url\s*=\s*https?://([^"\'/\s]+)(:[0-9]+)?~i', $str, $matches)) {
+	protected static function getMetaRedirect(string $str) {
+		if (preg_match('/<meta http-equiv=[^>]+ content=[^>]+url=([^"\'>]+)/', $str, $matches)) {
 			return $matches[1];
 		}
 
@@ -86,57 +88,70 @@ class URLInfoCollector {
 	}
 
 	public function getInfo(URL $url) {
-		if (!$this->isURLSafe($url)) {
-			throw new UnsafeURLException();
-		}
-
-		$initial_url_traversed = false;
+		$url = new Uri((string)$url);
+		$referer = '';
 
 		try {
-			$response = $this->client->request('GET', (string)$url, [
-				'stream' => true,
-				'timeout' => 5,
-				'connect_timeout' => 5,
-				'on_stats' => function(TransferStats $stats) use (&$initial_url_traversed) {
-					if ($initial_url_traversed) {
-						if (!$this->isURLSafe($stats->getEffectiveUri())) {
-							throw new UnsafeURLException();
+			for ($i = 0; $i < self::max_redirects; $i++) {
+				if (!$this->isURLSafe($url)) {
+					throw new UnsafeURLException('Blacklisted domain.');
+				}
+
+				$response = $this->client->request('GET', $url, [
+					'stream' => true,
+					'timeout' => 4,
+					'connect_timeout' => 4,
+					'headers' => [
+						'Referer' => $referer
+					]
+				]);
+
+				$redirect = null;
+				$content = '';
+				$body = $response->getBody();
+				$status = $response->getStatusCode();
+
+				if (in_array($status, [301, 302, 303, 307])) {
+					$redirect = $response->getHeader('Location')[0] ?? null;
+				}
+
+				if ($redirect === null) {
+					$content_type = $response->getHeader('Content-Type')[0] ?? null;
+					if (empty($content_type) || strpos($content_type, 'html') !== false) {
+						while (!$body->eof() && strlen($content) < 32768) {
+							$content .= $body->read(2048);
 						}
-					}
-					else {
-						$initial_url_traversed = true;
+
+						$body->close();
+						$content = self::stripHTMLSpaces($content);
+						$redirect = self::getMetaRedirect($content);
 					}
 				}
-			]);
 
-			$body = $response->getBody();
-			$response = '';
-			$response_len = 0;
+				$body->close();
 
-			while (!$body->eof() && $response_len <= 32767) {
-				$tmp = $body->read(1024);
-				$response_len += strlen($tmp);
-				$response .= $tmp;
+				if ($redirect === null) {
+					return [
+						'title' => self::getTitle($content)
+					];
+				}
+
+				$redirect = UriResolver::resolve($url, new Uri($redirect));
+				if ($redirect === $url) {
+					throw \RuntimeException('Redirect loop detected!');
+				}
+
+				$referer = $url;
+				$url = $redirect;
 			}
 
-			$body->close();
-			$meta_redirect_host = self::getMetaRedirectHost($response);
-
-			if ($meta_redirect_host !== null && !$this->isHostAllowed($meta_redirect_host)) {
-				throw new UnsafeURLException();
-			}
-
-			$title = $this->getTitle($response);
+			throw new UnsafeURLException('Too many redirects');
 		}
 		catch (\RuntimeException $e) {
-			# We couldn't get the contents of the URL; nothing requires to be done.
-			# Guzzle usually throws a GuzzleHttp\Exception\TransferException or one
-			# of its derived exceptions, but in some rare cases a RuntimeException
-			# can also be thrown.
+			# We couldn't get the contents of the URL; return a blank title.
+			return [
+				'title' => null
+			];
 		}
-
-		return [
-			'title' => $title ?? null
-		];
 	}
 }
