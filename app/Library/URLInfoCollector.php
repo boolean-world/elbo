@@ -59,7 +59,7 @@ class URLInfoCollector {
 
 	function stripHTMLSpaces($str) {
 		static $find = ['/\s*<\s*/', '/\s*>\s*/', '/\s+/'];
-		static $replace = ['<', '>', ' ', ''];
+		static $replace = ['<', '>', ' '];
 
 		return preg_replace($find, $replace, trim($str));
 	}
