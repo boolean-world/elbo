@@ -1610,7 +1610,7 @@ class URL {
 			$hostname = substr($hostname, 0, -1);
 		}
 
-		if (strlen($hostname) > 253) {
+		if (strlen($hostname) > 254) {
 			throw new InvalidURLException('Invalid hostname', InvalidURLException::INVALID_HOSTNAME);
 		}
 
