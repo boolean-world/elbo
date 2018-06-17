@@ -122,7 +122,6 @@ class URLInfoCollector {
 							$content .= $body->read(2048);
 						}
 
-						$body->close();
 						$content = self::stripHTMLSpaces($content);
 						$redirect = self::getMetaRedirect($content);
 					}
