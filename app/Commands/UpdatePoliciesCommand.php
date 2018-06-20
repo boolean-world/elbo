@@ -4,82 +4,114 @@ namespace Elbo\Commands;
 
 use GuzzleHttp\Client;
 use Illuminate\Database\Capsule\Manager as DB;
-use Elbo\{Models\DomainPolicy, Library\Configuration};
 use Symfony\Component\Console\{Command\Command, Input\InputInterface, Output\OutputInterface};
+use Elbo\{Library\URL, Exceptions\InvalidURLException, Models\DomainPolicy, Library\Configuration};
 
 class UpdatePoliciesCommand extends Command {
-	const domain_regex = '/^(?:[a-z0-9][a-z0-9-]*[a-z0-9]?\.)+(?:[a-z]{2,}(?:[a-z0-9-]*[a-z0-9])?)$/i';
-	const extract_domain_regex = '~^(?:https?://)?([^/]+)/.*$~i';
-
 	protected function configure() {
 		$this->setName('update:policies')
 		     ->setDescription('Update domain policies from publicly available blacklists')
 		     ->setHelp('Update domain policies from publicly available blacklists');
 	}
 
-	protected function processDomainList(string $text, array &$array, int $value) {
-		$line = strtok($text, "\r\n");
+	protected function stripWWW(string $domain) {
+		return preg_replace('/^www\.(.{4,}\.{2,})$/', '\1', $domain);
+	}
 
-		while ($line !== false) {
-			if (preg_match(self::domain_regex, $line)) {
-				$rule = preg_replace('/^www\.(.{4,}\..{2,})/', '\1', strtolower($line));
-				$array[$rule] = $value;
+	protected function processTextRules(string $filename, array &$array, int $value) {
+		$fp = fopen($filename, 'r');
+
+		while (($line = fgets($fp)) !== false) {
+			$line = trim(strtok($line, '#'));
+
+			if (preg_match('/^\d+.\d+.\d+.\d+\s+(.*)/', $line, $matches)) {
+				$domain = $matches[1];
+			}
+			else if (preg_match('/^https?:/', $line)) {
+				try {
+					$domain = URL::determineHostName($line);
+				}
+				catch (InvalidURLException $e) {
+					continue;
+				}
+			}
+			else if (preg_match('/[:.]/', $line) && !preg_match('/\s/', $line)) {
+				$domain = $line;
+			}
+			else {
+				continue;
 			}
 
-			$line = strtok("\r\n");
+			$domain = idn_to_ascii(strtolower($domain), 0, INTL_IDNA_VARIANT_UTS46);
+			$domain = $this->stripWWW($domain);
+			$array[$domain] = $value;
 		}
 	}
 
-	protected function processHostsFile(string $text, array &$array, int $value) {
-		$line = strtok($text, "\r\n");
+	protected function processJsonGzipRules(string $filename, array &$array, int $value) {
+		$fp = gzopen($filename, 'r');
+		$state = 0;
+		$url = '';
 
-		while ($line !== false) {
-			$line = preg_replace('/^\s*[0-9:.]+\s*|\s*#.*$/', '', $line);
+		// Simple scanner that looks for the string '"url":"..."' patterns, allowing
+		// loading of very big .json.gz files.
+		while (($str = gzgets($fp, 4096)) !== false) {
+			for ($i = 0; $i < strlen($str); $i++) {
+				if ($state === 0 && $str[$i] === '"') {
+					$state = 1;
+				}
+				else if ($state === 1 && $str[$i] === 'u') {
+					$state = 2;
+				}
+				else if ($state === 2 && $str[$i] === 'r') {
+					$state = 3;
+				}
+				else if ($state === 3 && $str[$i] === 'l') {
+					$state = 4;
+				}
+				else if ($state === 4 && $str[$i] === '"') {
+					$state = 5;
+				}
+				else if ($state === 5) {
+					if ($str[$i] === '"') {
+						$state = 6;
+						$url = '';
+					}
+					else if (strpos(" :\t\r\n", $i) === false) {
+						$state = 0;
+					}
+				}
+				else if ($state === 6) {
+					if ($str[$i] === '\\') {
+						$state = 7;
+					}
+					else if ($str[$i] === '"') {
+						try {
+							$domain = URL::determineHostName($url);
+							$domain = $this->stripWWW($domain);
+							$array[$domain] = $value;
+						}
+						catch (InvalidURLException $e) {
+							// ignore
+						}
 
-			if (preg_match(self::domain_regex, $line)) {
-				$rule = preg_replace('/^www\.(.{4,}\..{2,})/', '\1', strtolower($line));
-				$array[$rule] = $value;
+						$state = 0;
+					}
+					else {
+						$url .= $str[$i];
+					}
+				}
+				else if ($state === 7) {
+					$url .= $str[$i];
+					$state = 6;
+				}
+				else {
+					$state = 0;
+				}
 			}
-
-			$line = strtok("\r\n");
 		}
-	}
 
-	protected function processURLList(string $text, array &$array, int $value) {
-		$line = strtok($text, "\r\n");
-
-		while ($line !== false) {
-			if (preg_match(self::extract_domain_regex, $line, $matches)) {
-				$rule = strtolower(preg_replace('/\:[0-9]+$/', '', $matches[1]));
-				$rule = preg_replace('/^www\.(.{4,}\..{2,})/', '\1', $rule);
-
-				$array[$rule] = $value;
-			}
-
-			$line = strtok("\r\n");
-		}
-	}
-
-	protected function processIPList(string $text, array &$array, int $value) {
-		$line = strtok($text, "\r\n");
-
-		while ($line !== false) {
-			if (filter_var($line, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
-				$array[$line] = $value;
-			}
-
-			$line = strtok("\r\n");
-		}
-	}
-
-	protected function processSerializedPhpGzip(string $data, array &$array, int $value) {
-		foreach (unserialize(gzdecode($data)) as $item) {
-			if (preg_match(self::extract_domain_regex, $item['url'], $matches)) {
-				$rule = strtolower(preg_replace('/\:[0-9]+$/', '', $matches[1]));
-				$rule = preg_replace('/^www\.(.{4,}\..{2,})/', '\1', $rule);
-				$array[$rule] = $value;
-			}
-		}
+		gzclose($fp);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
@@ -88,6 +120,7 @@ class UpdatePoliciesCommand extends Command {
 		$config = new Configuration();
 		$client = new Client();
 		$domains = [];
+		$tmpfile = 'data/tmp/.policy.tmp';
 
 		foreach ([
 			'malware' => DomainPolicy::POLICY_BLOCKED_MALWARE,
@@ -96,23 +129,22 @@ class UpdatePoliciesCommand extends Command {
 			'redirector' => DomainPolicy::POLICY_BLOCKED_REDIRECTOR,
 			'spam' => DomainPolicy::POLICY_BLOCKED_SPAM,
 			'allowed' => DomainPolicy::POLICY_ALLOWED
-		] as $key => $value) {
-			foreach ([
-				'hosts_files' => 'processHostsFile',
-				'domain_lists' => 'processDomainList',
-				'url_lists' => 'processURLList',
-				'ip_lists' => 'processIPList',
-				'serialized_php_gz' => 'processSerializedPhpGzip'
-			] as $type => $processor) {
-				foreach ($config->get("url_policies.sources.${key}.${type}", []) as $entry) {
-					$output->writeln("Download: ${entry}");
-					$data = $client->get($entry)->getBody();
+		] as $section => $policy) {
+			foreach ($config->get("url_policies.sources.${section}", []) as $entry) {
+				$output->writeln("Download: ${entry}");
+				$data = $client->get($entry, ['sink' => $tmpfile]);
 
-					$output->writeln("Process : ${entry}");
-					$this->$processor($data, $domains, $value);
+				$output->writeln("Process : ${entry}");
+				if (preg_match('/\.json\.gz$/', $entry)) {
+					$this->processJsonGzipRules($tmpfile, $domains, $policy);
+				}
+				else {
+					$this->processTextRules($tmpfile, $domains, $policy);
 				}
 			}
 		}
+
+		@unlink($tmpfile);
 
 		$output->writeln('Beginning transaction...');
 

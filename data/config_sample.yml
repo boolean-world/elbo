@@ -61,38 +61,29 @@ url_policies:
   deny_urls: '/tmx\d+\.php'
   # URLs from which the domain policy database should be populated. They may
   # be classified into "malware", "phishing", "redirector", "illegal", "spam"
-  # or "allowed". They are pulled from sources, which may be "hosts_files",
-  # "url_lists", "domain_lists", "ip_lists", or "serialized_php_gz".
+  # or "allowed".
   sources:
     malware:
-      domain_lists:
-        - https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt
-        - http://mirror1.malwaredomains.com/files/justdomains
-        - http://mirror1.malwaredomains.com/files/immortal_domains.txt
-        - https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt
-        - http://www.networksec.org/grabbho/block.txt
-        - https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist
-      ip_lists:
-        - http://rules.emergingthreats.net/blockrules/compromised-ips.txt
-        - https://zeustracker.abuse.ch/blocklist.php?download=badips
-        - https://ransomwaretracker.abuse.ch/downloads/RW_IPBL.txt
-      url_lists:
-        - https://cybercrime-tracker.net/all.php
-        - http://vxvault.net/URL_List.php
-      hosts_files:
-        - https://www.malwaredomainlist.com/hostslist/hosts.txt
-        - https://hosts-file.net/pup.txt
+      - https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt
+      - http://mirror1.malwaredomains.com/files/justdomains
+      - http://mirror1.malwaredomains.com/files/immortal_domains.txt
+      - https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt
+      - http://www.networksec.org/grabbho/block.txt
+      - https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist
+      - http://rules.emergingthreats.net/blockrules/compromised-ips.txt
+      - https://zeustracker.abuse.ch/blocklist.php?download=badips
+      - https://ransomwaretracker.abuse.ch/downloads/RW_IPBL.txt
+      - https://cybercrime-tracker.net/all.php
+      - http://vxvault.net/URL_List.php
+      - https://www.malwaredomainlist.com/hostslist/hosts.txt
+      - https://hosts-file.net/pup.txt
     phishing:
-      url_lists:
-        - https://openphish.com/feed.txt
-      serialized_php_gz:
-        - http://data.phishtank.com/data/online-valid.php_serialized.gz
+      - https://openphish.com/feed.txt
+      - http://data.phishtank.com/data/online-valid.json.gz
     redirector:
-      hosts_files:
-        - https://raw.githubusercontent.com/supriyo-biswas/hostsfiles/master/lists/redirectors.txt
+      - https://raw.githubusercontent.com/supriyo-biswas/hostsfiles/master/lists/redirectors.txt
     spam:
-      hosts_files:
-        - https://hosts-file.net/pha.txt
+      - https://hosts-file.net/pha.txt
 
 # Email blacklist policies.
 # Blocks any email providers mentioned in the lists below (for registration)
