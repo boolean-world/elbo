@@ -77,7 +77,7 @@ class UpdatePoliciesCommand extends Command {
 						$state = 6;
 						$url = '';
 					}
-					else if (strpos(" :\t\r\n", $i) === false) {
+					else if (strpos(" :\t\r\n", $str[$i]) === false) {
 						$state = 0;
 					}
 				}
