@@ -5,7 +5,7 @@ namespace Elbo\Library;
 use Elbo\Exceptions\InvalidURLException;
 
 class URL {
-	const hostname_chars = 'abcdefghijklmnopqrstuvwxyz0123456789-.';
+	const hostname_chars = 'abcdefghijklmnopqrstuvwxyz0123456789_-.';
 	const path_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/-._~!$&\'()*+,;=?:%';
 	const query_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._=&%+';
 	const query_param_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._+';
