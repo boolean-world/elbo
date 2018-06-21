@@ -5,7 +5,7 @@ var imagemin = require("gulp-imagemin");
 var cleanCSS = require("gulp-clean-css");
 var uglify = require("gulp-uglify");
 
-var config = yaml.load("data/config/elbo.yml");
+var config = yaml.load("data/config.yml");
 
 var src_paths = {
 	img: "resources/img/**/*",

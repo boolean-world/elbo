@@ -4,7 +4,7 @@ This document contains instructions for installing and using the source code, as
 
 ## Development
 
-To get started with development, run the first seven steps from the installation section (see below); but do note that in `data/config/elbo.yml`, `environment.phase` must be set to `development` instead of production.
+To get started with development, run the first seven steps from the installation section (see below); but do note that in `data/config.yml`, `environment.phase` must be set to `development` instead of production.
 
 The application is developed in a model-view-controller pattern. The application logic resides in `app/` and the views reside in `resources/views/`. The front controller, `public/index.php` invokes the correct controllers for incoming requests. Specifically, the controllers reside in `app/Controllers` and the models in `app/Models`. Protection to the resources provided by the controllers (such as CSRF protection) is provided by a set of middlewares, located in `app/Middlewares`.
 
