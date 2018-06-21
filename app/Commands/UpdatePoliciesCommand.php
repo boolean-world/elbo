@@ -22,12 +22,12 @@ class UpdatePoliciesCommand extends Command {
 		$fp = fopen($filename, 'r');
 
 		while (($line = fgets($fp)) !== false) {
-			$line = trim(strtok($line, '#'));
+			$line = trim(preg_replace('/#.*/', '', $line));
 
 			if (preg_match('/^\d+.\d+.\d+.\d+\s+(.*)/', $line, $matches)) {
 				$domain = $matches[1];
 			}
-			else if (preg_match('/^https?:/', $line)) {
+			else if (strpos($line, '/') !== false) {
 				try {
 					$domain = URL::determineHostName($line);
 				}
