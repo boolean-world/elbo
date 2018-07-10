@@ -58,8 +58,8 @@ class URLInfoCollector {
 	}
 
 	function stripHTMLSpaces($str) {
-		static $find = ['/\s*<\s*/', '/\s*>\s*/', '/\s+/'];
-		static $replace = ['<', '>', ' '];
+		static $find = ['/\s*<\s*/', '/\s*>\s*/', '/\s+/', '/<!--.*?-->/'];
+		static $replace = ['<', '>', ' ', ''];
 
 		return preg_replace($find, $replace, trim($str));
 	}
@@ -79,8 +79,12 @@ class URLInfoCollector {
 		return mb_substr($title, 0, 100);
 	}
 
-	protected static function getMetaRedirect(string $str) {
+	protected static function getClientRedirect(string $str) {
 		if (preg_match('/<meta http-equiv=[^>]+ content=[^>]+url=([^"\'>]+)/', $str, $matches)) {
+			return $matches[1];
+		}
+
+		if (preg_match('/window\.location\.href ?= ?["\']([^"\']+)/', substr($str, 0, 512), $matches)) {
 			return $matches[1];
 		}
 
@@ -118,12 +122,12 @@ class URLInfoCollector {
 				if ($redirect === null) {
 					$content_type = $response->getHeader('Content-Type')[0] ?? null;
 					if (empty($content_type) || strpos($content_type, 'html') !== false) {
-						while (!$body->eof() && strlen($content) < 32768) {
+						while (!$body->eof() && strlen($content) < 16384) {
 							$content .= $body->read(2048);
 						}
 
 						$content = self::stripHTMLSpaces($content);
-						$redirect = self::getMetaRedirect($content);
+						$redirect = self::getClientRedirect($content);
 					}
 				}
 
