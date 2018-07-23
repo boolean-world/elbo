@@ -30,9 +30,9 @@ class NewPolicyHandlerController extends Controller {
 			'login_email' => User::where('id', $this->session->get('userid'))->pluck('email')->first(),
 		];
 
+		$automated = false;
 		$domain = trim($request->request->get('domain'));
 		$policy = (int)($request->request->get('policy'));
-		$automated = (bool)($request->request->get('automated'));
 		$comment = trim($request->request->get('comment'));
 
 		if (filter_var($domain, FILTER_VALIDATE_IP) === false) {

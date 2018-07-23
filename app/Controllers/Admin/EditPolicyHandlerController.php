@@ -38,7 +38,6 @@ class EditPolicyHandlerController extends Controller {
 
 		$domain = $data['domain'];
 		$policy = (int)($request->request->get('policy'));
-		$automated = (bool)($request->request->get('automated'));
 		$comment = trim($request->request->get('comment'));
 
 		if (!in_array($policy, [
@@ -60,7 +59,7 @@ class EditPolicyHandlerController extends Controller {
 		}
 
 		$entry->policy = $policy;
-		$entry->automated = $automated;
+		$entry->automated = false;
 		$entry->comment = $comment;
 		$entry->save();
 
