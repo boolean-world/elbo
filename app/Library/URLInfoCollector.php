@@ -114,14 +114,21 @@ class URLInfoCollector {
 				$content = '';
 				$body = $response->getBody();
 				$status = $response->getStatusCode();
+				$is_html = false;
 
 				if (in_array($status, [301, 302, 303, 307])) {
 					$redirect = $response->getHeader('Location')[0] ?? null;
 				}
 
+				if (!empty($response->getHeader('Refresh'))) {
+					throw new UnsafeURLException('Redirection via Refresh header forbidden!');
+				}
+
 				if ($redirect === null) {
 					$content_type = $response->getHeader('Content-Type')[0] ?? null;
-					if (empty($content_type) || strpos($content_type, 'html') !== false) {
+					$is_html = empty($content_type) || strpos($content_type, 'html') !== false;
+
+					if ($is_html) {
 						while (!$body->eof() && strlen($content) < 16384) {
 							$content .= $body->read(2048);
 						}
@@ -135,7 +142,7 @@ class URLInfoCollector {
 
 				if ($redirect === null) {
 					return [
-						'title' => self::getTitle($content)
+						'title' => $is_html ? self::getTitle($content) : null
 					];
 				}
 
