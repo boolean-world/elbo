@@ -148,6 +148,10 @@ class UpdatePoliciesCommand extends Command {
 
 		$output->writeln('Beginning transaction...');
 
+		if (isset($policy[''])) {
+			unset($policy['']);
+		}
+
 		DB::transaction(function() use ($output, $domains) {
 			$output->writeln('Removing previous automatic rules...');
 			DomainPolicy::where('automated', true)->delete();
