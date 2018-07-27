@@ -148,8 +148,8 @@ class UpdatePoliciesCommand extends Command {
 
 		$output->writeln('Beginning transaction...');
 
-		if (isset($policy[''])) {
-			unset($policy['']);
+		if (isset($domains[''])) {
+			unset($domains['']);
 		}
 
 		DB::transaction(function() use ($output, $domains) {

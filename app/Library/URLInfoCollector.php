@@ -80,7 +80,7 @@ class URLInfoCollector {
 	}
 
 	protected static function getClientRedirect(string $str) {
-		if (preg_match('/<meta http-equiv=[^>]+ content=[^>]+url=([^"\'>]+)/', $str, $matches)) {
+		if (preg_match('/<meta http-equiv=[^>]+ content=[^>]+url=([^"\'>]+)/i', $str, $matches)) {
 			return $matches[1];
 		}
 
