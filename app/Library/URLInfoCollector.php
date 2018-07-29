@@ -81,10 +81,15 @@ class URLInfoCollector {
 
 	protected static function getClientRedirect(string $str) {
 		if (preg_match('/<meta http-equiv=[^>]+ content=[^>]+url=([^"\'>]+)/i', $str, $matches)) {
+			if (preg_match('/no(?:js|javascript)/', $matches[1])) {
+				return null;
+			}
+
 			return $matches[1];
 		}
 
 		if (preg_match('/window\.location\.href ?= ?["\']([^"\']+)/', substr($str, 0, 512), $matches)) {
+			dump("JS Redir = ${matches[1]}");
 			return $matches[1];
 		}
 
@@ -118,6 +123,7 @@ class URLInfoCollector {
 
 				if (in_array($status, [301, 302, 303, 307])) {
 					$redirect = $response->getHeader('Location')[0] ?? null;
+					dump("HTTP Redirect = $redirect");
 				}
 
 				if (!empty($response->getHeader('Refresh'))) {
