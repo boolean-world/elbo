@@ -89,7 +89,6 @@ class URLInfoCollector {
 		}
 
 		if (preg_match('/window\.location\.href ?= ?["\']([^"\']+)/', substr($str, 0, 512), $matches)) {
-			dump("JS Redir = ${matches[1]}");
 			return $matches[1];
 		}
 
@@ -123,7 +122,6 @@ class URLInfoCollector {
 
 				if (in_array($status, [301, 302, 303, 307])) {
 					$redirect = $response->getHeader('Location')[0] ?? null;
-					dump("HTTP Redirect = $redirect");
 				}
 
 				if (!empty($response->getHeader('Refresh'))) {
