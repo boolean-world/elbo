@@ -152,7 +152,7 @@ class URLInfoCollector {
 
 				$redirect = UriResolver::resolve($url, new Uri($redirect));
 				if ($redirect === $url) {
-					throw \RuntimeException('Redirect loop detected!');
+					throw new \RuntimeException('Redirect loop detected!');
 				}
 
 				$referer = $url;
