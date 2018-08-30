@@ -6,7 +6,7 @@ use Elbo\{Models\DomainPolicy, Exceptions\UnsafeURLException};
 use GuzzleHttp\{Client, TransferStats, Psr7\Uri, Psr7\UriResolver};
 
 class URLInfoCollector {
-	const max_redirects = 4;
+	const max_redirects = 5;
 
 	protected $client;
 	protected $deny_regex;
@@ -31,7 +31,8 @@ class URLInfoCollector {
 				'DNT' => '1'
 			],
 			'allow_redirects' => false,
-			'exceptions' => false
+			'exceptions' => false,
+			'cookies' => true
 		]);
 	}
 
@@ -58,7 +59,7 @@ class URLInfoCollector {
 	}
 
 	function stripHTMLSpaces($str) {
-		static $find = ['/\s*<\s*/', '/\s*>\s*/', '/\s+/'];
+		static $find = ['/\s*<\s*/', '/\s*>\s*/', '/\s+/', '/<noscript[^>]*>.*<\/noscript>/'];
 		static $replace = ['<', '>', ' '];
 
 		return preg_replace($find, $replace, trim($str));
@@ -81,10 +82,6 @@ class URLInfoCollector {
 
 	protected static function getClientRedirect(string $str) {
 		if (preg_match('/<meta http-equiv=[^>]+ content=[^>]+url=([^"\'>]+)/i', $str, $matches)) {
-			if (preg_match('/\?.*no(?:js|(?:java)?script)/', $matches[1])) {
-				return null;
-			}
-
 			return $matches[1];
 		}
 
@@ -120,12 +117,12 @@ class URLInfoCollector {
 				$status = $response->getStatusCode();
 				$is_html = false;
 
-				if (in_array($status, [301, 302, 303, 307])) {
-					$redirect = $response->getHeader('Location')[0] ?? null;
-				}
-
 				if (!empty($response->getHeader('Refresh'))) {
 					throw new UnsafeURLException('Redirection via Refresh header forbidden!');
+				}
+
+				if (in_array($status, [301, 302, 303, 307])) {
+					$redirect = $response->getHeader('Location')[0] ?? null;
 				}
 
 				if ($redirect === null) {
