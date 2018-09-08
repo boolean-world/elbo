@@ -63,7 +63,7 @@ class NewPolicyHandlerController extends Controller {
 
 		$count = DomainPolicy::where('domain', $domain)->count();
 		if ($count > 0) {
-			return new Response($twig->render('admin/edit_policy.html.twig', $context + [
+			return new Response($twig->render('admin/add_policy.html.twig', $context + [
 				'entry' => compact('domain', 'policy', 'automated', 'comment'),
 				'error' => 3
 			]));
