@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
     sed -ri 's/^bind /#&/;s/^(port ).*$/\\10/;s/^# (unixsocket)/\\1/;s/^(unixsocketperm )[0-9]+/\\1777/' /etc/redis/redis.conf
     systemctl restart redis-server.service
     mkdir -p /home/vagrant/.local/bin/
-    wget https://git.io/psysh -O /home/vagrant/.local/bin/psysh
+    wget https://psysh.org/psysh -O /home/vagrant/.local/bin/psysh
     chmod +x /home/vagrant/.local/bin/psysh
     wget https://getcomposer.org/installer -O - | php
     mv composer.phar /home/vagrant/.local/bin/composer
