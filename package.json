@@ -19,9 +19,9 @@
   "dependencies": {
     "del": "^3.0.0",
     "gulp": "^3.9.1",
-    "gulp-clean-css": "^3.9.4",
+    "gulp-clean-css": "^3.10.0",
     "gulp-imagemin": "^4.1.0",
-    "gulp-uglify": "^3.0.0",
+    "gulp-uglify": "^3.0.1",
     "yamljs": "^0.3.0"
   }
 }
