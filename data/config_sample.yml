@@ -68,7 +68,6 @@ url_policies:
       - http://mirror1.malwaredomains.com/files/justdomains
       - http://mirror1.malwaredomains.com/files/immortal_domains.txt
       - https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt
-      - http://www.networksec.org/grabbho/block.txt
       - https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist
       - http://rules.emergingthreats.net/blockrules/compromised-ips.txt
       - https://zeustracker.abuse.ch/blocklist.php?download=badips
@@ -80,8 +79,6 @@ url_policies:
     phishing:
       - https://openphish.com/feed.txt
       - http://data.phishtank.com/data/online-valid.json.gz
-    redirector:
-      - https://raw.githubusercontent.com/supriyo-biswas/hostsfiles/master/lists/redirectors.txt
     spam:
       - https://hosts-file.net/pha.txt
 
