@@ -145,31 +145,42 @@ class UpdatePoliciesCommand extends Command {
 		}
 
 		@unlink($tmpfile);
-
 		$output->writeln('Beginning transaction...');
 
 		if (isset($domains[''])) {
 			unset($domains['']);
 		}
 
-		DB::transaction(function() use ($output, $domains) {
-			$output->writeln('Removing previous automatic rules...');
-			DomainPolicy::where('automated', true)->delete();
+		$db_domains = [];
+		foreach (DomainPolicy::where('automated', true)->select('domain')->get() as $d) {
+			$db_domains[$d->domain] = -1;
+		}
 
-			$output->writeln('Adding new rules...');
-			foreach ($domains as $domain => $policy) {
-				$count = DomainPolicy::where('domain', $domain)->count();
+		$add_domains = array_diff_key($domains, $db_domains);
+		$rm_domains = array_diff_key($db_domains, $domains);
 
-				if ($count === 0) {
-					DomainPolicy::create([
-						'domain' => $domain,
-						'automated' => true,
-						'policy' => $policy
-					]);
-				}
+		unset($db_domains);
+		unset($domains);
+
+		$len_add = count($add_domains);
+		$len_rm = count($rm_domains);
+
+		$output->writeln("Adding ${len_add} domains and removing ${len_rm} domains");
+
+		DB::transaction(function() use ($add_domains, $rm_domains) {
+			foreach ($rm_domains as $domain => $_) {
+				DomainPolicy::where('domain', $domain)->delete();
 			}
 
-			$output->writeln('Policies updated.');
+			foreach ($add_domains as $domain => $policy) {
+				DomainPolicy::create([
+					'domain' => $domain,
+					'automated' => true,
+					'policy' => $policy
+				])->save();
+			}
 		});
+
+		$output->writeln('Policies updated.');
 	}
 }
