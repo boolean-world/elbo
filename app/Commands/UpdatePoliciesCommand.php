@@ -177,7 +177,7 @@ class UpdatePoliciesCommand extends Command {
 					'domain' => $domain,
 					'automated' => true,
 					'policy' => $policy
-				])->save();
+				]);
 			}
 		});
 
