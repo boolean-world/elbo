@@ -173,11 +173,13 @@ class UpdatePoliciesCommand extends Command {
 			}
 
 			foreach ($add_domains as $domain => $policy) {
-				DomainPolicy::create([
-					'domain' => $domain,
-					'automated' => true,
-					'policy' => $policy
-				]);
+				if (!DomainPolicy::where('domain', $domain)->count()) {
+					DomainPolicy::create([
+						'domain' => $domain,
+						'automated' => true,
+						'policy' => $policy
+					]);
+				}
 			}
 		});
 
