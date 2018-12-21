@@ -3,9 +3,9 @@
 namespace Elbo\Controllers;
 
 use ReCaptcha\ReCaptcha;
-use Elbo\{Models\Stats, Library\URLShortener, Library\Controller};
 use Symfony\Component\HttpFoundation\{Request, Response, JsonResponse};
 use Elbo\Exceptions\{InvalidURLException, URLShortenerException, UnsafeURLException};
+use Elbo\{Models\Stats, Library\URLShortener, Library\Controller, Library\Configuration};
 
 class ShortenController extends Controller {
 	use \Elbo\Middlewares\Session;
@@ -42,6 +42,14 @@ class ShortenController extends Controller {
 			]);
 		}
 		catch (UnsafeURLException $e) {
+			$config = $this->container->get(Configuration::class);
+
+			if ($config->get('log_unsafe_urls', false)) {
+				$fp = fopen(__DIR__.'/../../data/log.txt', 'a+');
+				fprintf($fp, "%s %s %s %s\n", $ip, strftime('%Y-%m-%d %H:%M:%S'), $url, $e->getMessage());
+				fclose($fp);
+			}
+
 			return new JsonResponse([
 				'status' => false,
 				'reason' => 'prohibited_url'
