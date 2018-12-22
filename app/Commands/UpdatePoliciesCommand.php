@@ -156,8 +156,8 @@ class UpdatePoliciesCommand extends Command {
 			$db_domains[$d->domain] = -1;
 		}
 
-		$add_domains = array_diff_key($domains, $db_domains);
-		$rm_domains = array_diff_key($db_domains, $domains);
+		$add_domains = array_diff_assoc($domains, $db_domains);
+		$rm_domains = array_diff_assoc($db_domains, $domains);
 
 		unset($db_domains);
 		unset($domains);
