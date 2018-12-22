@@ -152,8 +152,8 @@ class UpdatePoliciesCommand extends Command {
 		}
 
 		$db_domains = [];
-		foreach (DomainPolicy::where('automated', true)->select('domain')->get() as $d) {
-			$db_domains[$d->domain] = -1;
+		foreach (DomainPolicy::where('automated', true)->select('domain', 'policy')->get() as $d) {
+			$db_domains[$d->domain] = $d->policy;
 		}
 
 		$add_domains = array_diff_assoc($domains, $db_domains);
