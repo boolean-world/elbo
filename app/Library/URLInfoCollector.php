@@ -58,7 +58,7 @@ class URLInfoCollector {
 		return preg_match($this->deny_regex, (string)$url) !== 1;
 	}
 
-	function stripHTMLSpaces($str) {
+	protected static function stripHTMLSpaces($str) {
 		static $find = ['/\s*<\s*/', '/\s*>\s*/', '/\s+/', '/<noscript[^>]*>.*?<\/noscript>/'];
 		static $replace = ['<', '>', ' '];
 
@@ -85,7 +85,9 @@ class URLInfoCollector {
 			return $matches[1];
 		}
 
-		if (preg_match('/window\.location(\.href)? ?= ?["\']([^"\']+)/', substr($str, 0, 512), $matches)) {
+		if (preg_match('/
+			(location(\.href)?\s*=|location\.replace\s*\()\s*["\']([^"\']+)
+		/x', substr($str, 0, 512), $matches)) {
 			return $matches[1];
 		}
 
