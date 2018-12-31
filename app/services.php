@@ -7,6 +7,7 @@ return (function() {
 
 	if ($config->get('environment.phase') === 'production') {
 		$containerBuilder->enableCompilation(__DIR__.'/../data/cache');
+		$containerBuilder->writeProxiesToFile(true, __DIR__.'/../data/cache/proxies');
 	}
 
 	$containerBuilder->addDefinitions([
@@ -26,7 +27,23 @@ return (function() {
 			return $redis;
 		},
 
-		BaconQrCode\Renderer\RendererInterface::class => DI\create(BaconQrCode\Renderer\Image\Png::class),
+		Symfony\Component\HttpFoundation\Request::class => DI\create(
+			Symfony\Component\HttpFoundation\Request::class
+		),
+
+		BaconQrCode\Renderer\RendererInterface::class => DI\create(
+			BaconQrCode\Renderer\Image\Png::class
+		),
+
+		# lazy initialized for performance
+
+		Elbo\RateLimiters\UserShortenRateLimiter::class => function() {
+			return DI\create(Elbo\RateLimiters\UserShortenRateLimiter::class)->lazy();
+		},
+
+		Elbo\RateLimiters\AnonShortenRateLimiter::class => function() {
+			return DI\create(Elbo\RateLimiters\AnonShortenRateLimiter::class)->lazy();
+		},
 
 		ReCaptcha\ReCaptcha::class => function(Elbo\Library\Configuration $config) {
 			return new ReCaptcha\ReCaptcha($config->get('api_key.recaptcha_secret_key'));

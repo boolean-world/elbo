@@ -3,20 +3,34 @@
 namespace Elbo\Middlewares;
 
 use ReCaptcha\ReCaptcha;
-use Symfony\Component\HttpFoundation\{Request, JsonResponse};
-use Elbo\RateLimiters\{AnonShortenRateLimiter, UserShortenRateLimiter};
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Elbo\RateLimiters\AnonShortenRateLimiter as AnonLimiter;
+use Elbo\RateLimiters\UserShortenRateLimiter as UserLimiter;
 
-trait ShortenRateLimited {
-	protected function shortenRateLimited(Request $request) {
+class ShortenRateLimited {
+	public $session;
+	public $ulimiter;
+	public $alimiter;
+	public $recaptcha;
+
+	public function __construct(Session $session, ReCaptcha $recaptcha, UserLimiter $ulimiter, AnonLimiter $alimiter) {
+		$this->session = $session;
+		$this->ulimiter = $ulimiter;
+		$this->alimiter = $alimiter;
+		$this->recaptcha = $recaptcha;
+	}
+
+	public function handle(Request $request, $next) {
 		$userid = $this->session->get('userid');
 		$ip = $request->getClientIp();
 
 		if ($userid !== null) {
-			$ratelimiter = $this->container->get(UserShortenRateLimiter::class);
+			$ratelimiter = $this->ulimiter;
 			$identifier = $userid;
 		}
 		else {
-			$ratelimiter = $this->container->get(AnonShortenRateLimiter::class);
+			$ratelimiter = $this->alimiter;
 			$identifier = $ip;
 		}
 
@@ -34,6 +48,6 @@ trait ShortenRateLimited {
 
 		$ratelimiter->increment($identifier);
 
-		return $this->next();
+		return $next();
 	}
 }

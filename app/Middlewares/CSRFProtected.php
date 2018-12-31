@@ -2,11 +2,22 @@
 
 namespace Elbo\Middlewares;
 
+use Twig_Environment;
 use Elbo\Models\User;
-use Symfony\Component\HttpFoundation\{Request, Response};
+use Elbo\Library\Session;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-trait CSRFProtected {
-	protected function csrfProtected(Request $request) {
+class CSRFProtected {
+	public $twig;
+	public $session;
+
+	public function __construct(Twig_Environment $twig, Session $session) {
+		$this->twig = $twig;
+		$this->session = $session;
+	}
+
+	public function handle(Request $request, $next) {
 		$referer = $request->headers->get('Origin') ?? $request->headers->get('Referer');
 		$referer_domain = preg_replace('#^https?://([^/]+)(?:/.*)?$#i', '\1', $referer);
 		$host = $request->headers->get('Host');
@@ -21,13 +32,11 @@ trait CSRFProtected {
 				$login_email = User::where('id', $userid)->pluck('email')->first();
 			}
 
-			$twig = $this->container->get(\Twig_Environment::class);
-
-			return new Response($twig->render('errors/csrf.html.twig', [
+			return new Response($this->twig->render('errors/csrf.html.twig', [
 				'login_email' => $login_email
 			]), 403);
 		}
 
-		return $this->next();
+		return $next();
 	}
 }

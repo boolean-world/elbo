@@ -4,11 +4,11 @@ use Elbo\Library\Configuration;
 
 $request_uri = rawurldecode(strtok($_SERVER['REQUEST_URI'], '?'));
 
-if (preg_match('#^/assets/#', $request_uri) === 1) {
+if (substr($request_uri, 0, 8) === '/assets/') {
 	return false;
 }
 
-if ($request_uri !== "/" && $request_uri[-1] === "/") {
+if ($request_uri !== '/' && $request_uri[-1] === '/') {
 	$request_uri = substr($request_uri, 0, -1);
 }
 

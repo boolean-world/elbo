@@ -2,19 +2,27 @@
 
 namespace Elbo\Middlewares;
 
-use Elbo\Models\{User, RememberToken};
+use Elbo\Models\User;
+use Elbo\Library\Session;
+use Elbo\Models\RememberToken;
 use Symfony\Component\HttpFoundation\Request;
 
-trait PersistLogin {
-	protected function persistLogin(Request $request) {
+class PersistLogin {
+	public $session;
+
+	public function __construct(Session $session) {
+		$this->session = $session;
+	}
+
+	public function handle(Request $request, $next) {
 		if ($this->session->get('userid') !== null) {
-			return $this->next();
+			return $next();
 		}
 
 		$token = $request->cookies->get('remembertoken');
 
 		if ($token === null) {
-			return $this->next();
+			return $next();
 		}
 
 		$tokeninfo = RememberToken::where('authenticator', hash('sha256', $token))->first();
@@ -23,7 +31,7 @@ trait PersistLogin {
 			// Introduce a random delay to penalize attackers.
 			usleep(random_int(100000, 300000));
 
-			$response = $this->next();
+			$response = $next();
 			$response->headers->clearCookie('remembertoken');
 
 			return $response;
@@ -33,7 +41,7 @@ trait PersistLogin {
 			// The token has expired, delete it.
 			$tokeninfo->delete();
 
-			$response = $this->next();
+			$response = $next();
 			$response->headers->clearCookie('remembertoken');
 
 			return $response;
@@ -53,6 +61,6 @@ trait PersistLogin {
 			'last_login_ip' => $request->getClientIp()
 		]);
 
-		return $this->next();
+		return $next();
 	}
 }

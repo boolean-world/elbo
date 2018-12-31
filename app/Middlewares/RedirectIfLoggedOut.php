@@ -5,13 +5,19 @@ namespace Elbo\Middlewares;
 use Elbo\Models\User;
 use Symfony\Component\HttpFoundation\{Request, RedirectResponse};
 
-trait RedirectIfLoggedOut {
-	protected function redirectIfLoggedOut(Request $request) {
+class RedirectIfLoggedOut {
+	public $session;
+
+	public function __construct(Session $session) {
+		$this->session = $session;
+	}
+
+	public function handle(Request $request, $next) {
 		$id = $this->session->get('userid');
 
 		if ($id !== null) {
 			if (User::where('id', $id)->where('disabled', '<>', 1)->count() === 1) {
-				return $this->next();
+				return $next();
 			}
 
 			// Session carries bad data, destroy it.

@@ -13,7 +13,8 @@
         "nette/mail": "^2.4",
         "maxmind-db/reader": "^1.1",
         "bacon/bacon-qr-code": "^1.0",
-        "symfony/filesystem": "^4.0"
+        "symfony/filesystem": "^4.0",
+        "ocramius/proxy-manager": "^2.2"
     },
     "autoload": {
     	"psr-4": {

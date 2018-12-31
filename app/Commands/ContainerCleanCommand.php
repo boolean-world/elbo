@@ -14,10 +14,15 @@ class ContainerCleanCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$fs = new Filesystem();
-		$path = 'data/cache/CompiledContainer.php';
+		$paths = [
+			'data/cache/CompiledContainer.php',
+			'data/cache/proxies'
+		];
 
-		if ($fs->exists($path)) {
-			$fs->remove($path);
+		foreach ($paths as $path) {
+			if ($fs->exists($path)) {
+				$fs->remove($path);
+			}
 		}
 
 		$output->writeln('Compiled container removed.');

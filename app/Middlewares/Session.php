@@ -2,18 +2,21 @@
 
 namespace Elbo\Middlewares;
 
-use Symfony\Component\HttpFoundation\{Request, Cookie};
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Request;
 
-trait Session {
-	protected $session;
+class Session {
+	public $session;
 
-	protected function manageSession(Request $request) {
-		$this->session = $this->container->get(\Elbo\Library\Session::class);
+	public function __construct(Session $session) {
+		$this->session = $session;
+	}
+
+	public function handle(Request $request, $next) {
 		$before_sessionid = $request->cookies->get('sessionid');
-
 		$this->session->bind($before_sessionid);
 
-		$response = $this->next();
+		$response = $next();
 		$after_sessionid = $this->session->getId();
 
 		// the session ID was modified.
